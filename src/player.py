@@ -31,11 +31,13 @@ class Player:
         if orientation == 'horizontal':
             for i in range(ship.length):
                 self.grid[y][x + i] = 1
+                ship.state = 1
                 ship.coordinates.append((x + i, y))
                 ship.coordinate_states.append(1)
         elif orientation == 'vertical':
             for i in range(ship.length):
                 self.grid[y + i][x] = 1
+                ship.state = 1
                 ship.coordinates.append((x, y + i))
                 ship.coordinate_states.append(1)
         ship.state = 1
@@ -55,6 +57,10 @@ class Player:
             if enemy.grid[x][y] == 1:
                 self.enemy_grid[x][y] = 2
                 print("Hit!")
+                #for ship in enemy.ships:
+                    #for coord in ship.coordinates:
+
+
                 return True
 
             # if the enemy doesn't have a ship in this position
@@ -65,3 +71,9 @@ class Player:
 
     def get_coordinate_state(self, x, y):
         return self.grid[x][y]
+
+    def get_coordinate_ship(self, x, y):
+        for ship in self.ships:
+            for coord in ship.coordinates:
+                if coord == (x, y):
+                    return ship
