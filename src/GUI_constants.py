@@ -1,0 +1,21 @@
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (189, 25, 25)
+GREEN = (25, 189, 25)
+BLUE = (25, 25, 189)
+
+# Positions and dimension
+# Window size
+WINDOW_SIZE_X = 500
+WINDOW_SIZE_Y = 600
+
+# Primary Grid
+PRIMARY_GRID_X = 50
+PRIMARY_GRID_Y = 50
+PRIMARY_CELL_SIZE = 30
+
+# Secondary Grid
+SECONDARY_GRID_X = 125
+SECONDARY_GRID_Y = 380
+SECONDARY_CELL_SIZE = 15
