@@ -63,6 +63,7 @@ def get_cell(x, y):
     y = (y - y_offset) // block_size
     return x, y, type
 
+
 # Initialize the pygame
 pygame.init()
 
