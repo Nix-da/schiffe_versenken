@@ -10,14 +10,14 @@ class Player:
         self.ships = {
             'battleship': [Battleship()],
             'cruiser': [Cruiser(), Cruiser()],
-            'submarine': [Submarine(), Submarine(), Submarine()],
-            'destroyer': [Destroyer(), Destroyer(), Destroyer(), Destroyer()]
+            'destroyer': [Destroyer(), Destroyer(), Destroyer()],
+            'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
         }
         self.enemy_ships = {
             'battleship': [Battleship()],
             'cruiser': [Cruiser(), Cruiser()],
-            'submarine': [Submarine(), Submarine(), Submarine()],
-            'destroyer': [Destroyer(), Destroyer(), Destroyer(), Destroyer()]
+            'destroyer': [Destroyer(), Destroyer(), Destroyer()],
+            'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
         }
 
     def place_ship(self, ship, x, y, orientation):
@@ -60,12 +60,10 @@ class Player:
                 if enemy_ship.state == 3:
                     for coord in enemy_ship.coordinates:
                         self.enemy_grid[coord[0]][coord[1]] = 3
-                    print("Sunk!")
-                    print(enemy_ship)
+                    print(enemy_ship.__class__.__name__ + " sunk!")
                 else:
                     self.enemy_grid[x][y] = 2
                     print("Hit!")
-                    print(enemy_ship)
                 return True
 
             # if the enemy doesn't have a ship in this position
