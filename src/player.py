@@ -76,7 +76,8 @@ class Player:
         return self.grid[x][y]
 
     def get_coordinate_ship(self, x, y):
-        for ship in self.ships:
-            for coord in ship.coordinates:
-                if coord == (x, y):
-                    return ship
+        for ships in self.ships.values():
+            for ship in ships:
+                for coord in ship.coordinates:
+                    if coord == (x, y):
+                        return ship
