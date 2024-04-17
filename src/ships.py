@@ -6,11 +6,24 @@ class Ship(ABC):
         self.length = self.get_length()
         self.coordinates = []
         self.state = 0
+        # state 0: not placed
+        # state 1: placed
+        # state 2: hit
+        # state 3: sunk
         self.coordinate_states = []
 
     @abstractmethod
     def get_length(self):
         pass
+
+    def hit(self, x, y):
+        index = self.coordinates.index((x, y))
+        self.coordinate_states[index] = 2
+        self.state = 2
+        if self.coordinate_states.count(2) == self.length:
+            self.state = 3
+            self.coordinate_states = [3] * self.length
+            return True
 
 
 class Battleship(Ship):
