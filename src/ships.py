@@ -2,10 +2,11 @@ from abc import ABC, abstractmethod
 
 
 class Ship(ABC):
-    def __init__(self, coordinates):
+    def __init__(self, coordinates=None):
         self.length = self.get_length()
         self.coordinates = []
-        self.state = [0] * self.length
+        self.state = 0
+        self.coordinate_states = []
 
     @abstractmethod
     def get_length(self):
