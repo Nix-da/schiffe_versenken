@@ -42,19 +42,24 @@ class Player:
 
         return True
 
-    def attack(self, x, y):
+    def attack(self, enemy, x, y):
+        # if cell is already attacked
         if self.enemy_grid[x][y] > 0:
             print("You already attacked this position")
             return False
+
+        # if cell is unknown
         if self.enemy_grid[x][y] == 0:
+
+            # if the enemy has a ship in this position
+            if enemy.grid[x][y] == 1:
+                self.enemy_grid[x][y] = 2
+                print("Hit!")
+                return True
+
+            # if the enemy doesn't have a ship in this position
             self.enemy_grid[x][y] = 1
-            '''for ship in self.enemy_ships:
-                for i in range(len(ship.coordinates)):
-                    if ship.coordinates[i] == (x, y):
-                        ship.coordinate_states[i] = 1
-                        if all(ship.coordinate_states):
-                            ship.state = 1
-                            print(f'{ship} was destroyed')'''
+            print("Miss!")
             return True
         return False
 

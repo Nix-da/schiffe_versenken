@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 from GUI_constants import *
+from player import Player
 
 
 def draw_grid(screen, game, type):
@@ -64,6 +65,29 @@ def get_cell(x, y):
     return x, y, type
 
 
+p1 = Player("Player 1")
+p1.place_ship(p1.ships['battleship'][0], 0, 0, 'horizontal')
+p1.place_ship(p1.ships['cruiser'][0], 0, 1, 'horizontal')
+p1.place_ship(p1.ships['cruiser'][1], 0, 2, 'horizontal')
+p1.place_ship(p1.ships['submarine'][0], 0, 3, 'horizontal')
+p1.place_ship(p1.ships['submarine'][1], 0, 4, 'horizontal')
+p1.place_ship(p1.ships['submarine'][2], 0, 5, 'horizontal')
+p1.place_ship(p1.ships['destroyer'][0], 0, 6, 'horizontal')
+p1.place_ship(p1.ships['destroyer'][1], 0, 7, 'horizontal')
+p1.place_ship(p1.ships['destroyer'][2], 0, 8, 'horizontal')
+p1.place_ship(p1.ships['destroyer'][3], 0, 9, 'horizontal')
+p2 = Player("Player 2")
+p2.place_ship(p2.ships['battleship'][0], 0, 0, 'horizontal')
+p2.place_ship(p2.ships['cruiser'][0], 0, 1, 'horizontal')
+p2.place_ship(p2.ships['cruiser'][1], 0, 2, 'horizontal')
+p2.place_ship(p2.ships['submarine'][0], 0, 3, 'horizontal')
+p2.place_ship(p2.ships['submarine'][1], 0, 4, 'horizontal')
+p2.place_ship(p2.ships['submarine'][2], 0, 5, 'horizontal')
+p2.place_ship(p2.ships['destroyer'][0], 0, 6, 'horizontal')
+p2.place_ship(p2.ships['destroyer'][1], 0, 7, 'horizontal')
+p2.place_ship(p2.ships['destroyer'][2], 0, 8, 'horizontal')
+p2.place_ship(p2.ships['destroyer'][3], 0, 9, 'horizontal')
+
 # Initialize the pygame
 pygame.init()
 
@@ -80,8 +104,6 @@ pygame.display.set_caption('Schiffe versenken')
 icon = pygame.image.load('./assets/icon.png')
 pygame.display.set_icon(icon)
 
-t1 = np.zeros((10, 10))
-t2 = np.zeros((10, 10))
 
 # Main loop
 running = True
@@ -90,8 +112,8 @@ while running:
     screen.fill(WHITE)
     # draw two grids
 
-    draw_grid(screen, t1, "primary")
-    draw_grid(screen, t2, "secondary")
+    draw_grid(screen, p1.enemy_grid, "primary")
+    draw_grid(screen, p1.grid, "secondary")
 
     # get key press events
     for event in pygame.event.get():
@@ -103,11 +125,11 @@ while running:
                 x, y, type = get_cell(pos[0], pos[1])
                 print(get_cell(pos[0], pos[1]))
                 if type == "primary":
-                    t1[x][y] = (t1[x][y] + 1) % 4
-                if type == "secondary":
-                    t = t1
-                    t1 = t2
-                    t2 = t
+                    p1.attack(p2, x, y)
+                #if type == "secondary":
+                    #t = t1
+                    #t1 = t2
+                    #t2 = t
 
     # refresh the display
     pygame.display.flip()
