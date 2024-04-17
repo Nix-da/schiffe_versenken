@@ -57,7 +57,7 @@ def get_cell(x, y):
         x_offset = SECONDARY_GRID_X
         y_offset = SECONDARY_GRID_Y
     else:
-        return None
+        return 0, 0, None
 
     x = (x - x_offset) // block_size
     y = (y - y_offset) // block_size
@@ -80,15 +80,18 @@ pygame.display.set_caption('Schiffe versenken')
 icon = pygame.image.load('./assets/icon.png')
 pygame.display.set_icon(icon)
 
+t1 = np.zeros((10, 10))
+t2 = np.zeros((10, 10))
+
 # Main loop
 running = True
 while running:
     # fill the window white
     screen.fill(WHITE)
     # draw two grids
-    t = np.zeros((10, 10))
-    draw_grid(screen, t, "primary")
-    draw_grid(screen, t, "secondary")
+
+    draw_grid(screen, t1, "primary")
+    draw_grid(screen, t2, "secondary")
 
     # get key press events
     for event in pygame.event.get():
@@ -97,11 +100,14 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             if event.button == 1:
+                x, y, type = get_cell(pos[0], pos[1])
                 print(get_cell(pos[0], pos[1]))
-        elif event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos()
-            if event.button == 1:
-                print(f"Left click at {pos}")
+                if type == "primary":
+                    t1[x][y] = (t1[x][y] + 1) % 4
+                if type == "secondary":
+                    t = t1
+                    t1 = t2
+                    t2 = t
 
     # refresh the display
     pygame.display.flip()
