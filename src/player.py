@@ -43,11 +43,11 @@ class Player:
         return True
 
     def attack(self, x, y):
-        if self.enemy_grid[y][x] > 0:
+        if self.enemy_grid[x][y] > 0:
             print("You already attacked this position")
             return False
-        if self.enemy_grid[y][x] == 0:
-            self.enemy_grid[y][x] = 1
+        if self.enemy_grid[x][y] == 0:
+            self.enemy_grid[x][y] = 1
             '''for ship in self.enemy_ships:
                 for i in range(len(ship.coordinates)):
                     if ship.coordinates[i] == (x, y):
@@ -58,8 +58,5 @@ class Player:
             return True
         return False
 
-
-p = Player('Player 1')
-print(p.grid)
-p.place_ship(p.ships['battleship'][0], 6, 0, 'horizontal')
-print(p.grid)
+    def get_coordinate_state(self, x, y):
+        return self.grid[x][y]
