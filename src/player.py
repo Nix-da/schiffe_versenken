@@ -54,13 +54,16 @@ class Player:
         if self.enemy_grid[x][y] == 0:
 
             # if the enemy has a ship in this position
-            if enemy.grid[x][y] == 1:
-                self.enemy_grid[x][y] = 2
-                print("Hit!")
-                #for ship in enemy.ships:
-                    #for coord in ship.coordinates:
-
-
+            if enemy.get_coordinate_state(x, y) == 1:
+                enemy_ship = enemy.get_coordinate_ship(x, y)
+                enemy_ship.hit(x, y)
+                if enemy_ship.state == 3:
+                    for coord in enemy_ship.coordinates:
+                        self.enemy_grid[coord[0]][coord[1]] = 3
+                    print("Sunk!")
+                else:
+                    self.enemy_grid[x][y] = 2
+                    print("Hit!")
                 return True
 
             # if the enemy doesn't have a ship in this position
