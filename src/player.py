@@ -1,6 +1,6 @@
 import numpy as np
 from ships import *
-
+from GUI_constants import *
 
 class Player:
     def __init__(self, name):
@@ -21,12 +21,22 @@ class Player:
         }
 
     def place_ship(self, ship, x, y, orientation):
-        if x + ship.length > 10 and orientation == 'horizontal':
-            print("Ship can't be placed here")
-            return False
-        if y + ship.length > 10 and orientation == 'vertical':
-            print("Ship can't be placed here")
-            return False
+        if orientation == 'horizontal':
+            if x + ship.length > 10:
+                return False
+            blockings = [self.grid[y][max(0, x - 1):min(x + ship.length + 1, GRID_SIZE)],
+                         self.grid[max(0, y - 1)][x:x + ship.length],
+                         self.grid[min(y + 1, GRID_SIZE - 1)][x:x + ship.length]]
+            if [item for sublist in blockings for item in sublist].count(1) > 0:
+                return False
+        if orientation == 'vertical':
+            if y + ship.length > 10:
+                return False
+            blockings = [self.grid[max(0, y - 1):min(y + ship.length + 1, GRID_SIZE), x],
+                         self.grid[y:y + ship.length, max(0, x - 1)],
+                         self.grid[y:y + ship.length, min(x + 1, GRID_SIZE - 1)]]
+            if [item for sublist in blockings for item in sublist].count(1) > 0:
+                return False
 
         if orientation == 'horizontal':
             for i in range(ship.length):
@@ -41,7 +51,14 @@ class Player:
                 ship.coordinates.append((y + i, x))
                 ship.coordinate_states.append(1)
         ship.state = 1
+        print("placed ship at" + str((x, y)) + " with orientation " + orientation)
+        return True
 
+    def all_ships_placed(self):
+        for ships in self.ships.values():
+            for ship in ships:
+                if ship.state == 0:
+                    return False
         return True
 
     def attack(self, enemy, x, y):
@@ -81,3 +98,6 @@ class Player:
                 for coord in ship.coordinates:
                     if coord == (x, y):
                         return ship
+
+    def get_ships_list(self):
+        return [ship for ships in self.ships.values() for ship in ships]

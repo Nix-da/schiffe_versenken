@@ -66,29 +66,21 @@ def get_cell(x, y):
 
 
 p1 = Player("Player 1")
-p1.place_ship(p1.ships['battleship'][0], 0, 0, 'horizontal')
-p1.place_ship(p1.ships['cruiser'][0], 0, 1, 'horizontal')
-p1.place_ship(p1.ships['cruiser'][1], 0, 2, 'horizontal')
-p1.place_ship(p1.ships['destroyer'][0], 0, 3, 'horizontal')
-p1.place_ship(p1.ships['destroyer'][1], 0, 4, 'horizontal')
-p1.place_ship(p1.ships['destroyer'][2], 0, 5, 'horizontal')
-p1.place_ship(p1.ships['submarine'][0], 0, 6, 'horizontal')
-p1.place_ship(p1.ships['submarine'][1], 0, 7, 'horizontal')
-p1.place_ship(p1.ships['submarine'][2], 0, 8, 'horizontal')
-p1.place_ship(p1.ships['submarine'][3], 0, 9, 'horizontal')
+#p1.place_ship(p1.get_ships_list()[0], 0, 0, 'horizontal')
+#p1.place_ship(p1.get_ships_list()[1], 0, 1, 'horizontal')
+#p1.place_ship(p1.get_ships_list()[2], 0, 2, 'horizontal')
+for ship in p1.get_ships_list():
+    while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
+        pass
 
 
 p2 = Player("Player 2")
-p2.place_ship(p2.ships['battleship'][0], 0, 0, 'horizontal')
-p2.place_ship(p2.ships['cruiser'][0], 0, 1, 'horizontal')
-p2.place_ship(p2.ships['cruiser'][1], 0, 2, 'horizontal')
-p2.place_ship(p2.ships['destroyer'][0], 0, 3, 'horizontal')
-p2.place_ship(p2.ships['destroyer'][1], 0, 4, 'horizontal')
-p2.place_ship(p2.ships['destroyer'][2], 0, 5, 'horizontal')
-p2.place_ship(p2.ships['submarine'][0], 0, 6, 'horizontal')
-p2.place_ship(p2.ships['submarine'][1], 0, 7, 'horizontal')
-p2.place_ship(p2.ships['submarine'][2], 0, 8, 'horizontal')
-p2.place_ship(p2.ships['submarine'][3], 0, 9, 'horizontal')
+p2.place_ship(p2.get_ships_list()[1], 9, 4, 'vertical')
+p2.place_ship(p2.get_ships_list()[2], 5, 4, 'horizontal')
+
+for ship in p2.get_ships_list():
+    while not p2.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
+        pass
 
 
 # Initialize the pygame
@@ -108,6 +100,7 @@ icon = pygame.image.load('./assets/icon.png')
 pygame.display.set_icon(icon)
 
 primary_own = 1  # 0 = own field on top, 1 = enemy field on top
+state = 0  # 0 = placing ships, 1 = attacking, 2 = game over
 
 # Main loop
 running = True
@@ -118,22 +111,29 @@ while running:
 
     if primary_own == 0:
         draw_grid(screen, p1.grid, "primary")
-        draw_grid(screen, p1.enemy_grid, "secondary")
+        draw_grid(screen, p2.enemy_grid, "secondary")
     else:
         draw_grid(screen, p1.enemy_grid, "primary")
-        draw_grid(screen, p1.grid, "secondary")
+        draw_grid(screen, p2.grid, "secondary")
 
     # get key press events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        # if button press is mouse click
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            # get position of the mouse on the screen
             pos = pygame.mouse.get_pos()
             if event.button == 1:
+                # convert the screen position to grid position
                 x, y, type = get_cell(pos[0], pos[1])
                 print(get_cell(pos[0], pos[1]))
+
+                # if the position is on the primary grid, attack the enemy
                 if type == "primary":
                     p1.attack(p2, x, y)
+                # if the position is on the secondary grid, toggle the grids
                 if type == "secondary":
                     primary_own = not primary_own
                     print("Toggle primary and secondary grid")
