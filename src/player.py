@@ -78,6 +78,8 @@ class Player:
                     for coord in enemy_ship.coordinates:
                         self.enemy_grid[coord[0]][coord[1]] = 3
                     print(enemy_ship.__class__.__name__ + " sunk!")
+                    if all(ship.state == 3 for ship in enemy.get_ships_list()):
+                        print("You win!")
                 else:
                     self.enemy_grid[x][y] = 2
                     print("Hit!")

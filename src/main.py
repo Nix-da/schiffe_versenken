@@ -105,10 +105,10 @@ while running:
 
     if primary_own == 0:
         draw_grid(screen, p1.grid, "primary")
-        draw_grid(screen, p2.enemy_grid, "secondary")
+        draw_grid(screen, p1.enemy_grid, "secondary")
     else:
         draw_grid(screen, p1.enemy_grid, "primary")
-        draw_grid(screen, p2.grid, "secondary")
+        draw_grid(screen, p1.grid, "secondary")
 
     # get key press events
     for event in pygame.event.get():
