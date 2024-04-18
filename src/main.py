@@ -66,18 +66,12 @@ def get_cell(x, y):
 
 
 p1 = Player("Player 1")
-#p1.place_ship(p1.get_ships_list()[0], 0, 0, 'horizontal')
-#p1.place_ship(p1.get_ships_list()[1], 0, 1, 'horizontal')
-#p1.place_ship(p1.get_ships_list()[2], 0, 2, 'horizontal')
 for ship in p1.get_ships_list():
     while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
         pass
 
 
 p2 = Player("Player 2")
-p2.place_ship(p2.get_ships_list()[1], 9, 4, 'vertical')
-p2.place_ship(p2.get_ships_list()[2], 5, 4, 'horizontal')
-
 for ship in p2.get_ships_list():
     while not p2.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
         pass
