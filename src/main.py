@@ -107,6 +107,7 @@ pygame.display.set_caption('Schiffe versenken')
 icon = pygame.image.load('./assets/icon.png')
 pygame.display.set_icon(icon)
 
+primary_own = 1  # 0 = own field on top, 1 = enemy field on top
 
 # Main loop
 running = True
@@ -115,8 +116,12 @@ while running:
     screen.fill(WHITE)
     # draw two grids
 
-    draw_grid(screen, p1.enemy_grid, "primary")
-    draw_grid(screen, p1.grid, "secondary")
+    if primary_own == 0:
+        draw_grid(screen, p1.grid, "primary")
+        draw_grid(screen, p1.enemy_grid, "secondary")
+    else:
+        draw_grid(screen, p1.enemy_grid, "primary")
+        draw_grid(screen, p1.grid, "secondary")
 
     # get key press events
     for event in pygame.event.get():
@@ -129,10 +134,9 @@ while running:
                 print(get_cell(pos[0], pos[1]))
                 if type == "primary":
                     p1.attack(p2, x, y)
-                #if type == "secondary":
-                    #t = t1
-                    #t1 = t2
-                    #t2 = t
+                if type == "secondary":
+                    primary_own = not primary_own
+                    print("Toggle primary and secondary grid")
 
     # refresh the display
     pygame.display.flip()
