@@ -2,6 +2,10 @@ import pygame
 import numpy as np
 from GUI_constants import *
 from player import Player
+from server import start_server
+from client import start_client
+import socket
+import threading
 
 
 def draw_grid(screen, game, type):
@@ -63,6 +67,30 @@ def get_cell(x, y):
     x = (x - x_offset) // block_size
     y = (y - y_offset) // block_size
     return x, y, type
+
+
+def get_my_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
+
+mode = "server"
+if "server":
+    server_thread = threading.Thread(target=start_server(get_my_ip()))
+    server_thread.start()
+    server_thread.join()
+else:
+    client_thread = threading.Thread(target=start_client(get_my_ip()))
+    client_thread.start()
+    client_thread.join()
 
 
 p1 = Player("Player 1")
