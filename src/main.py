@@ -3,7 +3,7 @@ import numpy as np
 from GUI_constants import *
 from player import Player
 from server import start_server
-from client import start_client
+from client import start_client, send_message
 import socket
 import threading
 
@@ -83,14 +83,11 @@ def get_my_ip():
 
 
 mode = "server"
-if "server":
-    server_thread = threading.Thread(target=start_server(get_my_ip()))
-    server_thread.start()
-    server_thread.join()
-else:
-    client_thread = threading.Thread(target=start_client(get_my_ip()))
-    client_thread.start()
-    client_thread.join()
+if mode == "server":
+    server = start_server(get_my_ip())
+elif mode == "client":
+    client = start_client(get_my_ip())
+    send_message(client, "Hello server!")
 
 
 p1 = Player("Player 1")

@@ -11,7 +11,7 @@ def start_client(ip, port=12345):
     # receive data from the server
     print(s.recv(1024))
     # close the connection
-    s.close()
+    #s.close()
 
 
 def send_message(server, message):

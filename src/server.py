@@ -17,4 +17,4 @@ def start_server(ip, port=12345):
         print(f'Received {repr(data)}')
 
         conn.send(b'Thank you for connecting')
-        conn.close()
+        #conn.close()
