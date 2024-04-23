@@ -82,11 +82,12 @@ def get_my_ip():
     return IP
 
 
-enemy_id = get_my_ip()
-s = Server(get_my_ip())
-c = Client(enemy_id)
-c.send_message("Hello World")
-s.send_message("Hello World")
+#enemy_id = '172.16.31.173'  # get_my_ip()
+#print("Connecting " + str(get_my_ip()) + " to " + enemy_id)
+#s = Server(get_my_ip())
+#c = Client(enemy_id)
+#c.send_message("Hello World")
+#s.send_message("Hello World")
 
 
 # randomly place ships
