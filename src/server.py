@@ -12,6 +12,7 @@ class Server:
         self.clients = []
         self.thread = threading.Thread(target=self.run)
         self.thread.start()
+        self.buffer = []
 
     def run(self):
         while True:
@@ -26,6 +27,7 @@ class Server:
             message = self.receive_message(client)
             if message:
                 print(f"Server Received: {message}")
+                self.buffer.append(message)
 
     def send_message(self, client, message):
         client.sendall(message.encode("utf-8"))
