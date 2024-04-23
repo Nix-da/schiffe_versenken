@@ -69,10 +69,11 @@ def get_cell(x, y):
 my_ip = "192.168.178.20"
 enemy_ip = "192.168.178.128"
 
-my_node = P2PNode(my_ip)
+my_player = Player("my_player", P2PNode(my_ip))
+my_node = P2PNode(my_ip, my_player)
+my_player.node = my_node
 my_node.connect_to(enemy_ip)
 
-my_player = Player("my_player", my_node)
 
 
 print("Placing ships")
@@ -124,7 +125,7 @@ while running:
                 # if the position is on the primary grid, attack the enemy
                 if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0:
                     # send attack message to enemy and wait for response
-                    response = my_player.node.send_message("attack," + str(x) + "," + str(y), enemy_ip)
+                    response = my_player.node.send_message("attack," + str(x) + "," + str(y))
                     if response.split(",")[0] == "hit":
                         my_player.enemy_grid[x][y] = 2
                 # if the position is on the secondary grid, toggle the grids
