@@ -48,3 +48,12 @@ class Game:
         finally:
             s.close()
         return ip
+
+    def handle_server_messages(self):
+        if self.server.buffer:
+            message = self.server.buffer.pop(0).split(",")
+            if message[1] == "attack":
+                x, y = int(message[2]), int(message[3])
+                self.players[self.player_on_turn].attack(self.players[not self.player_on_turn], x, y)
+                self.player_on_turn = not self.player_on_turn
+                print("Other players turn")
