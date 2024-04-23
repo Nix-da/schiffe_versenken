@@ -1,7 +1,6 @@
 import numpy as np
 from ships import *
 from GUI_constants import *
-from client import Client
 
 
 class Player:
@@ -108,3 +107,10 @@ class Player:
 
     def get_ships_list(self):
         return [ship for ships in self.ships.values() for ship in ships]
+
+    def parse_message(self, message):
+        command, *args = message.split(",")
+        if command == "attack":
+            x, y = map(int, args)
+            return self.attack(self.node, x, y)
+        return False
