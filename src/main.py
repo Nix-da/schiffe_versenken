@@ -2,7 +2,6 @@ import pygame
 import numpy as np
 from GUI_constants import *
 from player import Player
-from game import Game
 from p2p_node import P2PNode
 
 
@@ -67,92 +66,82 @@ def get_cell(x, y):
     return x, y, type
 
 
-g = Game()
-role = "guest"
-
 my_ip = "192.168.178.20"
 enemy_ip = "192.168.178.128"
 
 my_node = P2PNode(my_ip)
 my_node.connect_to(enemy_ip)
 
-if role == "host":
-    player_index = 0
-else:
-    player_index = 1
+my_player = Player("my_player", my_node)
 
-if g.get_phase() == 1:
-    print("Placing ships")
-    for ship in g.players[0].get_ships_list():
-        while not g.players[0].place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
-                                          np.random.choice(['horizontal', 'vertical'])):
-            pass
 
-    for ship in g.players[1].get_ships_list():
-        while not g.players[1].place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
-                                          np.random.choice(['horizontal', 'vertical'])):
-            pass
+print("Placing ships")
+for ship in my_player.get_ships_list():
+    while not my_player.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
+                                      np.random.choice(['horizontal', 'vertical'])):
+        pass
 
-    # Initialize the pygame
-    pygame.init()
 
-    # Set the dimensions of the window
-    window_size = (WINDOW_SIZE_X, WINDOW_SIZE_Y)
-    screen = pygame.display.set_mode(window_size)
-    # fill the window with the color white
+# Initialize the pygame
+pygame.init()
+
+# Set the dimensions of the window
+window_size = (WINDOW_SIZE_X, WINDOW_SIZE_Y)
+screen = pygame.display.set_mode(window_size)
+# fill the window with the color white
+screen.fill(WHITE)
+
+# Set the window name
+pygame.display.set_caption('Schiffe versenken')
+
+# Set the window icon
+icon = pygame.image.load('./assets/icon.png')
+pygame.display.set_icon(icon)
+
+primary_own = 1  # 0 = own field on top, 1 = enemy field on top
+state = 0  # 0 = placing ships, 1 = attacking, 2 = game over
+
+# Main loop
+running = True
+while running:
+    # fill the window white
     screen.fill(WHITE)
 
-    # Set the window name
-    pygame.display.set_caption('Schiffe versenken')
+    # get key press events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-    # Set the window icon
-    icon = pygame.image.load('./assets/icon.png')
-    pygame.display.set_icon(icon)
+        # if button press is mouse click
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # get position of the mouse on the screen
+            pos = pygame.mouse.get_pos()
+            if event.button == 1:
+                # convert the screen position to grid position
+                x, y, type = get_cell(pos[0], pos[1])
+                print(get_cell(pos[0], pos[1]))
 
-    primary_own = 1  # 0 = own field on top, 1 = enemy field on top
-    state = 0  # 0 = placing ships, 1 = attacking, 2 = game over
+                # if the position is on the primary grid, attack the enemy
+                if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0:
+                    # send attack message to enemy and wait for response
+                    response = my_player.node.send_message("attack," + str(x) + "," + str(y), enemy_ip)
+                    if response.split(",")[0] == "hit":
+                        my_player.enemy_grid[x][y] = 2
+                # if the position is on the secondary grid, toggle the grids
+                if type == "secondary":
+                    primary_own = not primary_own
+                    print("Toggle primary and secondary grid")
 
-    # Main loop
-    running = True
-    while running:
-        # fill the window white
-        screen.fill(WHITE)
+    # draw two grids
+    if primary_own == 0:
+        draw_grid(screen, my_player.grid, "primary")
+        draw_grid(screen, my_player.enemy_grid, "secondary")
+    else:
+        draw_grid(screen, my_player.enemy_grid, "primary")
+        draw_grid(screen, my_player.grid, "secondary")
 
-        # let the server handle its messages
-        g.handle_server_messages()
+    # refresh the display
+    pygame.display.flip()
 
-        # get key press events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-            # if button press is mouse click
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                # get position of the mouse on the screen
-                pos = pygame.mouse.get_pos()
-                if event.button == 1:
-                    # convert the screen position to grid position
-                    x, y, type = get_cell(pos[0], pos[1])
-                    print(get_cell(pos[0], pos[1]))
-
-                    # if the position is on the primary grid, attack the enemy
-                    #if type == "primary" and primary_own and g.player_on_turn == player_index:
-                        #g.players[g.player_on_turn].client.send_message(str(g.player_on_turn) + ",attack," + str(x) + "," + str(y))
-                    # if the position is on the secondary grid, toggle the grids
-                    if type == "secondary":
-                        primary_own = not primary_own
-                        print("Toggle primary and secondary grid")
-
-        # draw two grids
-        if primary_own == 0:
-            draw_grid(screen, g.players[player_index].grid, "primary")
-            draw_grid(screen, g.players[player_index].enemy_grid, "secondary")
-        else:
-            draw_grid(screen, g.players[player_index].enemy_grid, "primary")
-            draw_grid(screen, g.players[player_index].grid, "secondary")
-
-        # refresh the display
-        pygame.display.flip()
-
-    # Quit pygame
-    pygame.quit()
+# Quit pygame
+pygame.quit()

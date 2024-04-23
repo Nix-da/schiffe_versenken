@@ -24,6 +24,7 @@ class Player:
 
         self.node = node
 
+
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
             if x + ship.length > 10:

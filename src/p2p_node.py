@@ -14,13 +14,12 @@ class P2PNode(Node):
 
     def connect_to(self, host, port=PORT):
         super().connect_to(host, port)
-        self.buffer.append("connected," + host + "," + str(port))
 
     def send_message(self, message, reciever=None):
         super().send_message(message, reciever)
+        while not self.buffer:
+            pass
 
+        return self.buffer.pop()
 
-node = P2PNode('192.168.178.20')
-node.connect_to('192.168.178.128')
-node.send_message("pc to laptop")
 
