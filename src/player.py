@@ -109,6 +109,10 @@ class Player:
         return [ship for ships in self.ships.values() for ship in ships]
 
     def parse_message(self, message):
-        message = message.split(",")
-        if message[0] == "hit":
-            self.enemy_grid[message[1]][message[2]] = 2
+        try:
+            message = message.split(",")
+            if message[0] == "attack":
+                self.attack(self, int(message[1]), int(message[2]))
+                self.node.send_message("hit," + message[1] + "," + message[2])
+        except:
+            pass

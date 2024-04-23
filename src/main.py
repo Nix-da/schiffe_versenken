@@ -69,11 +69,12 @@ def get_cell(x, y):
 my_ip = "192.168.178.20"
 enemy_ip = "192.168.178.128"
 
-my_player = Player("my_player", P2PNode(my_ip))
-my_node = P2PNode(my_ip, my_player)
-my_player.node = my_node
-my_node.connect_to(enemy_ip)
+#my_node = P2PNode(my_ip)
+#my_node.connect_to(enemy_ip)
+#my_player = Player("my_player", my_node)
 
+my_player = Player("Player1", P2PNode(my_ip))
+my_node = P2PNode(my_ip, my_player)
 
 
 print("Placing ships")
