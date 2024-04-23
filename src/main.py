@@ -2,8 +2,8 @@ import pygame
 import numpy as np
 from GUI_constants import *
 from player import Player
-from server import start_server
-from client import start_client, send_message
+from server import Server
+from client import Client
 import socket
 import threading
 
@@ -82,25 +82,24 @@ def get_my_ip():
     return IP
 
 
-mode = "server"
-if mode == "server":
-    server = start_server(get_my_ip())
-elif mode == "client":
-    client = start_client(get_my_ip())
-    send_message(client, "Hello server!")
+s = Server(get_my_ip(), 12345)
+c = Client(get_my_ip(), 12345)
+c.send_message("Hello World")
+s.send_message("Hello World")
+
 
 
 p1 = Player("Player 1")
 for ship in p1.get_ships_list():
-    while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
+    while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
+                            np.random.choice(['horizontal', 'vertical'])):
         pass
-
 
 p2 = Player("Player 2")
 for ship in p2.get_ships_list():
-    while not p2.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
+    while not p2.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
+                            np.random.choice(['horizontal', 'vertical'])):
         pass
-
 
 # Initialize the pygame
 pygame.init()

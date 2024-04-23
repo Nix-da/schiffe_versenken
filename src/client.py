@@ -1,21 +1,27 @@
 import socket
+import threading
 
 
-def start_client(ip, port=12345):
-    s = socket.socket()  # Create a socket object
-    host = ip
+class Client:
+    def __init__(self, host, port):
+        self.s = socket.socket()
+        self.host = host
+        self.port = port
+        self.s.connect((self.host, self.port))
+        self.thread = threading.Thread(target=self.run)
+        self.thread.start()
 
-    s.connect((host, port))
-    s.send(b'Hello server!')
+    def run(self):
+        while True:
+            message = self.receive_message()
+            if message:
+                print(f"Client Received: {message}")
 
-    # receive data from the server
-    print(s.recv(1024))
-    # close the connection
-    #s.close()
+    def send_message(self, message):
+        self.s.sendall(message.encode("utf-8"))
 
+    def receive_message(self):
+        return self.s.recv(1024).decode("utf-8")
 
-def send_message(server, message):
-    # convert the message to bytes
-    message = message.encode('utf-8')
-    # send the message
-    server.send(message)
+    def close_connection(self):
+        self.s.close()
