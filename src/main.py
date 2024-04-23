@@ -89,6 +89,7 @@ c.send_message("Hello World")
 s.send_message("Hello World")
 
 
+# randomly place ships
 p1 = Player("Player 1")
 for ship in p1.get_ships_list():
     while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
@@ -149,7 +150,7 @@ while running:
                 print(get_cell(pos[0], pos[1]))
 
                 # if the position is on the primary grid, attack the enemy
-                if type == "primary":
+                if type == "primary" and primary_own:
                     c.send_message("attack " + str(x) + " " + str(y))
                     p1.attack(p2, x, y)
                 # if the position is on the secondary grid, toggle the grids
