@@ -51,7 +51,7 @@ class Player:
                 ship.coordinates.append((y + i, x))
                 ship.coordinate_states.append(1)
         ship.state = 1
-        print("placed ship at" + str((x, y)) + " with orientation " + orientation)
+        #print("placed ship at" + str((x, y)) + " with orientation " + orientation)
         return True
 
     def all_ships_placed(self):
