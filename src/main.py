@@ -2,10 +2,7 @@ import pygame
 import numpy as np
 from GUI_constants import *
 from player import Player
-from server import Server
-from client import Client
-import socket
-import threading
+from game import Game
 
 
 def draw_grid(screen, game, type):
@@ -69,35 +66,19 @@ def get_cell(x, y):
     return x, y, type
 
 
-def get_my_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        # doesn't even have to be reachable
-        s.connect(('10.255.255.255', 1))
-        IP = s.getsockname()[0]
-    except Exception:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
-
-
-#enemy_id = '172.16.31.173'  # get_my_ip()
-#print("Connecting " + str(get_my_ip()) + " to " + enemy_id)
-#s = Server(get_my_ip())
-#c = Client(enemy_id)
-#c.send_message("Hello World")
-#s.send_message("Hello World")
+g = Game()
+ip = g.host_game()
+#g.connect_to_game(ip)
 
 
 # randomly place ships
-p1 = Player("Player 1")
+p1 = g.players[0]
 for ship in p1.get_ships_list():
     while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
                             np.random.choice(['horizontal', 'vertical'])):
         pass
 
-p2 = Player("Player 2")
+p2 = g.players[-1]
 for ship in p2.get_ships_list():
     while not p2.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
                             np.random.choice(['horizontal', 'vertical'])):
@@ -152,7 +133,7 @@ while running:
 
                 # if the position is on the primary grid, attack the enemy
                 if type == "primary" and primary_own:
-                    c.send_message("attack " + str(x) + " " + str(y))
+                    p2.send_message(str(x) + " " + str(y))
                     p1.attack(p2, x, y)
                 # if the position is on the secondary grid, toggle the grids
                 if type == "secondary":
