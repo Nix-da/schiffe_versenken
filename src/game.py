@@ -27,7 +27,8 @@ class Game:
         return self.get_my_ip()
 
     def connect_to_game(self, ip):
-        self.players.append(Player("guest", ip))
+        self.players.append(Player("host", ip))
+        self.players.append(Player("guest", self.get_my_ip()))
         self.phase = 1
 
     def disconnect(self):
