@@ -8,10 +8,12 @@ class Game:
     def __init__(self):
         self.server = None
         self.players = []
+        self.player_on_turn = 0
         self.phase = 0  # 0 = connecting, 1 = placing ships, 2 = attacking, 3 = game over
 
     def reset(self):
         self.phase = 1
+        self.player_on_turn = 0
 
     def get_phase(self):
         return self.phase
@@ -31,6 +33,7 @@ class Game:
     def disconnect(self):
         self.server.close_connection()
         self.players = []
+        self.player_on_turn = 0
         self.phase = 0
 
     def get_my_ip(self):
