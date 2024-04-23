@@ -57,3 +57,7 @@ class Game:
                 self.players[self.player_on_turn].attack(self.players[not self.player_on_turn], x, y)
                 self.player_on_turn = not self.player_on_turn
                 print("Other players turn")
+            if message[0] == "connected":
+                self.players.append(Player("guest", message[1]))
+                self.phase = 1
+                print("all Players connected")

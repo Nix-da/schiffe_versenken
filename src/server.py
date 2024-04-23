@@ -19,6 +19,7 @@ class Server:
             c, addr = self.s.accept()
             self.clients.append((c, addr))
             print(f"Server connected to: {addr}")
+            self.buffer.append("connected,"+str(addr))
             client_thread = threading.Thread(target=self.handle_client, args=(c,))
             client_thread.start()
 

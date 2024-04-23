@@ -23,7 +23,7 @@ class Player:
         }
 
         self.ip = ip
-        self.client = Client(self.ip, port)
+        self.client = Client(self.ip, 12345)
 
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
