@@ -67,22 +67,32 @@ def get_cell(x, y):
 
 
 g = Game()
-ip = g.host_game()
-# ip = '172.16.31.173'
-g.connect_to_game(ip)
+role = "host"
+ip = None
+
+if role == "host":
+    ip = g.host_game()
+    g.connect_to_game(ip)
+if role == "guest":
+    ip = '172.16.31.173'
+    g.connect_to_game(ip)
+
+player_index = -1
+if role == "host":
+    player_index = 0
+if role == "guest":
+    player_index = 1
 
 if g.get_phase() == 1:
     print("Placing ships")
-    p1 = g.players[0]
-    for ship in p1.get_ships_list():
-        while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
-                                np.random.choice(['horizontal', 'vertical'])):
+    for ship in g.players[0].get_ships_list():
+        while not g.players[0].place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
+                                          np.random.choice(['horizontal', 'vertical'])):
             pass
 
-    p2 = g.players[-1]
-    for ship in p2.get_ships_list():
-        while not p2.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
-                                np.random.choice(['horizontal', 'vertical'])):
+    for ship in g.players[1].get_ships_list():
+        while not g.players[1].place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
+                                          np.random.choice(['horizontal', 'vertical'])):
             pass
 
     # Initialize the pygame
@@ -109,14 +119,9 @@ if g.get_phase() == 1:
     while running:
         # fill the window white
         screen.fill(WHITE)
-        # draw two grids
 
-        if primary_own == 0:
-            draw_grid(screen, p1.grid, "primary")
-            draw_grid(screen, p1.enemy_grid, "secondary")
-        else:
-            draw_grid(screen, p1.enemy_grid, "primary")
-            draw_grid(screen, p1.grid, "secondary")
+        # let the server handle its messages
+        g.handle_server_messages()
 
         # get key press events
         for event in pygame.event.get():
@@ -133,13 +138,20 @@ if g.get_phase() == 1:
                     print(get_cell(pos[0], pos[1]))
 
                     # if the position is on the primary grid, attack the enemy
-                    if type == "primary" and primary_own:
-                        p2.client.send_message(str(x) + " " + str(y))
-                        p1.attack(p2, x, y)
+                    if type == "primary" and primary_own and g.player_on_turn == player_index:
+                        g.players[g.player_on_turn].client.send_message(str(g.player_on_turn) + ",attack," + str(x) + "," + str(y))
                     # if the position is on the secondary grid, toggle the grids
                     if type == "secondary":
                         primary_own = not primary_own
                         print("Toggle primary and secondary grid")
+
+        # draw two grids
+        if primary_own == 0:
+            draw_grid(screen, g.players[player_index].grid, "primary")
+            draw_grid(screen, g.players[player_index].enemy_grid, "secondary")
+        else:
+            draw_grid(screen, g.players[player_index].enemy_grid, "primary")
+            draw_grid(screen, g.players[player_index].grid, "secondary")
 
         # refresh the display
         pygame.display.flip()
