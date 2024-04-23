@@ -6,10 +6,9 @@ import socket
 class Game:
 
     def __init__(self):
+        self.server = None
         self.players = []
         self.phase = 0  # 0 = connecting, 1 = placing ships, 2 = attacking, 3 = game over
-
-        self.server = Server(self.get_my_ip())
 
     def reset(self):
         self.phase = 1
@@ -18,6 +17,8 @@ class Game:
         return self.phase
 
     def host_game(self):
+        self.server = Server(self.get_my_ip())
+
         ip = self.get_my_ip()
         self.players.append(Player("host", ip))
 
@@ -26,6 +27,11 @@ class Game:
     def connect_to_game(self, ip):
         self.players.append(Player("guest", ip))
         self.phase = 1
+
+    def disconnect(self):
+        self.server.close_connection()
+        self.players = []
+        self.phase = 0
 
     def get_my_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
