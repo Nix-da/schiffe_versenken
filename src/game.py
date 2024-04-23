@@ -18,17 +18,17 @@ class Game:
     def get_phase(self):
         return self.phase
 
-    def host_game(self):
-        self.server = Server(self.get_my_ip())
+    def host_game(self, port=12345):
+        self.server = Server(self.get_my_ip(), port)
 
         ip = self.get_my_ip()
-        self.players.append(Player("host", ip))
+        self.players.append(Player("host", ip, port))
 
         return self.get_my_ip()
 
-    def connect_to_game(self, ip):
-        self.players.append(Player("host", ip))
-        self.players.append(Player("guest", self.get_my_ip()))
+    def connect_to_game(self, ip, port=12345):
+        self.players.append(Player("host", ip, port))
+        self.players.append(Player("guest", self.get_my_ip(), port + 1))
         self.phase = 1
 
     def disconnect(self):

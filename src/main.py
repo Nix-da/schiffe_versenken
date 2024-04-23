@@ -72,9 +72,9 @@ ip = None
 
 if role == "host":
     ip = g.host_game()
-    g.connect_to_game(ip)
+    # g.connect_to_game(ip)
 if role == "guest":
-    ip = '172.16.31.173'
+    ip = '192.168.178.128'
     g.connect_to_game(ip)
 
 player_index = -1

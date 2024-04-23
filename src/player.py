@@ -5,7 +5,7 @@ from client import Client
 
 
 class Player:
-    def __init__(self, name, ip):
+    def __init__(self, name, ip, port):
         self.name = name
         self.grid = np.zeros((10, 10))
         self.enemy_grid = np.zeros((10, 10))
@@ -23,7 +23,7 @@ class Player:
         }
 
         self.ip = ip
-        self.client = Client(self.ip, 12345)
+        self.client = Client(self.ip, port)
 
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
