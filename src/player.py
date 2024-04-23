@@ -1,12 +1,11 @@
 import numpy as np
 from ships import *
 from GUI_constants import *
-from server import Server
 from client import Client
 
 
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, ip):
         self.name = name
         self.grid = np.zeros((10, 10))
         self.enemy_grid = np.zeros((10, 10))
@@ -23,8 +22,8 @@ class Player:
             'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
         }
 
-        self.server = Server('172.16.108.90', 12345 + int(name[-1]))
-        self.client = Client('172.16.108.90', 12345 + int(name[-1]))
+        self.ip = ip
+        self.client = Client(self.ip, 12345)
 
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
