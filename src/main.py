@@ -82,11 +82,11 @@ def get_my_ip():
     return IP
 
 
-s = Server(get_my_ip(), 12345)
-c = Client(get_my_ip(), 12345)
+enemy_id = get_my_ip()
+s = Server(get_my_ip())
+c = Client(enemy_id)
 c.send_message("Hello World")
 s.send_message("Hello World")
-
 
 
 p1 = Player("Player 1")
@@ -150,6 +150,7 @@ while running:
 
                 # if the position is on the primary grid, attack the enemy
                 if type == "primary":
+                    c.send_message("attack " + str(x) + " " + str(y))
                     p1.attack(p2, x, y)
                 # if the position is on the secondary grid, toggle the grids
                 if type == "secondary":

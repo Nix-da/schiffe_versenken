@@ -2,6 +2,7 @@ import numpy as np
 from ships import *
 from GUI_constants import *
 
+
 class Player:
     def __init__(self, name):
         self.name = name

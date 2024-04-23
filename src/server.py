@@ -1,8 +1,9 @@
 import socket
 import threading
 
+
 class Server:
-    def __init__(self, host, port):
+    def __init__(self, host, port=12345):
         self.s = socket.socket()
         self.host = host
         self.port = port
