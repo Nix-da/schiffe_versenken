@@ -1,6 +1,8 @@
 import numpy as np
 from ships import *
 from GUI_constants import *
+from server import Server
+from client import Client
 
 
 class Player:
@@ -20,6 +22,9 @@ class Player:
             'destroyer': [Destroyer(), Destroyer(), Destroyer()],
             'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
         }
+
+        self.server = Server('172.16.108.90', 12345 + int(name[-1]))
+        self.client = Client('172.16.108.90', 12345 + int(name[-1]))
 
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
