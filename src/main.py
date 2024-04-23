@@ -3,6 +3,7 @@ import numpy as np
 from GUI_constants import *
 from player import Player
 from game import Game
+from p2p_node import P2PNode
 
 
 def draw_grid(screen, game, type):
@@ -67,20 +68,17 @@ def get_cell(x, y):
 
 
 g = Game()
-role = "host"
-ip = None
+role = "guest"
 
-if role == "host":
-    ip = g.host_game()
-    # g.connect_to_game(ip)
-if role == "guest":
-    ip = '192.168.178.20'
-    g.connect_to_game(ip)
+my_ip = "192.168.178.20"
+enemy_ip = "192.168.178.128"
 
-player_index = -1
+my_node = P2PNode(my_ip)
+my_node.connect_to(enemy_ip)
+
 if role == "host":
     player_index = 0
-if role == "guest":
+else:
     player_index = 1
 
 if g.get_phase() == 1:
@@ -138,8 +136,8 @@ if g.get_phase() == 1:
                     print(get_cell(pos[0], pos[1]))
 
                     # if the position is on the primary grid, attack the enemy
-                    if type == "primary" and primary_own and g.player_on_turn == player_index:
-                        g.players[g.player_on_turn].client.send_message(str(g.player_on_turn) + ",attack," + str(x) + "," + str(y))
+                    #if type == "primary" and primary_own and g.player_on_turn == player_index:
+                        #g.players[g.player_on_turn].client.send_message(str(g.player_on_turn) + ",attack," + str(x) + "," + str(y))
                     # if the position is on the secondary grid, toggle the grids
                     if type == "secondary":
                         primary_own = not primary_own

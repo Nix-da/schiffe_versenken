@@ -28,7 +28,6 @@ class Game:
 
     def connect_to_game(self, ip, port=12345):
         self.players.append(Player("host", ip, port))
-        self.players.append(Player("guest", self.get_my_ip(), port + 1))
         self.phase = 1
 
     def disconnect(self):
@@ -37,17 +36,7 @@ class Game:
         self.player_on_turn = 0
         self.phase = 0
 
-    def get_my_ip(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            # doesn't even have to be reachable
-            s.connect(('10.255.255.255', 1))
-            ip = s.getsockname()[0]
-        except Exception:
-            ip = '127.0.0.1'
-        finally:
-            s.close()
-        return ip
+
 
     def handle_server_messages(self):
         if self.server.buffer:
