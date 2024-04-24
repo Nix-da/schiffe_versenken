@@ -86,7 +86,7 @@ class Player:
                 return "result;hit;" + str(x) + ";" + str(y)
         # if there is no ship in this position
         else:
-            #self.grid[x][y] = 1
+            self.grid[x][y] = 4
             return "result;miss;" + str(x) + ";" + str(y)
 
     def get_coordinate_state(self, x, y):
