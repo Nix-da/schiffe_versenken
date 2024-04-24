@@ -127,6 +127,9 @@ class Player:
                     for coord in coords:
                         print(coord)
                         self.enemy_grid[coord[0]][coord[1]] = 3
+                if message[1] == "win":
+                    self.on_turn = False
+
 
         except:
             pass
