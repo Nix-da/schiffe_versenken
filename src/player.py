@@ -21,6 +21,7 @@ class Player:
             'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
         }
 
+        self.node = None
 
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
@@ -53,7 +54,7 @@ class Player:
                 ship.coordinates.append((y + i, x))
                 ship.coordinate_states.append(1)
         ship.state = 1
-        #print("placed ship at" + str((x, y)) + " with orientation " + orientation)
+        # print("placed ship at" + str((x, y)) + " with orientation " + orientation)
         return True
 
     def all_ships_placed(self):
@@ -63,35 +64,31 @@ class Player:
                     return False
         return True
 
-    def attack(self, enemy, x, y):
+    def on_attack(self, x, y):
         # if cell is already attacked
         if self.enemy_grid[x][y] > 0:
             print("You already attacked this position")
             return False
 
-        # if cell is unknown
-        if self.enemy_grid[x][y] == 0:
+        # if there is a ship in this position
+        if self.get_coordinate_state(x, y) == 1:
+            ship = self.get_coordinate_ship(x, y)
+            ship.hit(x, y)
 
-            # if the enemy has a ship in this position
-            if enemy.get_coordinate_state(x, y) == 1:
-                enemy_ship = enemy.get_coordinate_ship(x, y)
-                enemy_ship.hit(x, y)
-                if enemy_ship.state == 3:
-                    for coord in enemy_ship.coordinates:
-                        self.enemy_grid[coord[0]][coord[1]] = 3
-                    print(enemy_ship.__class__.__name__ + " sunk!")
-                    if all(ship.state == 3 for ship in enemy.get_ships_list()):
-                        print("You win!")
-                else:
-                    self.enemy_grid[x][y] = 2
-                    print("Hit!")
-                return True
-
-            # if the enemy doesn't have a ship in this position
-            self.enemy_grid[x][y] = 1
-            print("Miss!")
-            return True
-        return False
+            # if this ship is sunk
+            if ship.state == 3:
+                for coord in ship.coordinates:
+                    self.grid[coord[0]][coord[1]] = 3
+                print(ship.__class__.__name__ + " sunk!")
+                if all(ship.state == 3 for ship in self.get_ships_list()):
+                    print("You win!")
+                return "sunk," + str(x) + "," + str(y) + ship.__class__.__name__ + "," + ship.coordinates
+            else:
+                self.grid[x][y] = 2
+                return "hit," + str(x) + "," + str(y)
+        # if there is no ship in this position
+        else:
+            return "miss," + str(x) + "," + str(y)
 
     def get_coordinate_state(self, x, y):
         return self.grid[x][y]
@@ -109,8 +106,18 @@ class Player:
     def parse_message(self, message):
         try:
             message = message.split(",")
+            # actions
             if message[0] == "attack":
-                self.attack(self, int(message[1]), int(message[2]))
-                self.node.send_message("hit," + message[1] + "," + message[2])
+                result = self.on_attack(int(message[1]), int(message[2]))
+                self.node.send_message(result)
+            # results
+            if message[0] == "miss":
+                self.enemy_grid[int(message[1])][int(message[2])] = 1
+            if message[0] == "hit":
+                self.enemy_grid[int(message[1])][int(message[2])] = 2
+            if message[0] == "sunk":
+                for coord in message[4:]:
+                    self.enemy_grid[int(coord[1])][int(coord[2])] = 3
+
         except:
             pass

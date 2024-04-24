@@ -66,12 +66,13 @@ def get_cell(x, y):
     return x, y, type
 
 
-my_ip = "172.16.122.113"
-enemy_ip = "172.16.123.32"
+my_ip = "172.17.1.86"
+enemy_ip = "172.17.1.246"
 
 
 my_player = Player("Player1")
 my_node = P2PNode(my_ip)
+my_player.node = my_node
 my_node.player = my_player
 my_node.connect_to(enemy_ip)
 
