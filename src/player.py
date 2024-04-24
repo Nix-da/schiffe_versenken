@@ -78,7 +78,7 @@ class Player:
                     self.grid[coord[0]][coord[1]] = 3
                 print(ship.__class__.__name__ + " sunk!")
                 if all(ship.state == 3 for ship in self.get_ships_list()):
-                    print("You win!")
+                    print("You lost!")
                 return "result,sunk," + str(x) + "," + str(y) + ship.__class__.__name__ + "," + ship.coordinates
             else:
                 self.grid[x][y] = 2
@@ -108,17 +108,20 @@ class Player:
             if message[0] == "action":
                 if message[1] == "attack":
                     result = self.on_attack(int(message[2]), int(message[3]))
-                    if result:
-                        self.on_turn = True
-                        self.node.send_message(result)
+                    self.on_turn = True
+                    print("your turn")
+                    self.node.send_message(result)
             # results
             if message[0] == "result":
                 self.on_turn = False
                 if message[1] == "miss":
+                    print("missed")
                     self.enemy_grid[int(message[2])][int(message[3])] = 1
                 if message[1] == "hit":
+                    print("hit")
                     self.enemy_grid[int(message[2])][int(message[3])] = 2
                 if message[1] == "sunk":
+                    print("sunk")
                     for coord in message[5].strip('][').split(', '):
                         self.enemy_grid[int(coord[2])][int(coord[3])] = 3
 
