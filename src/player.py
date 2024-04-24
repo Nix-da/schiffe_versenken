@@ -67,11 +67,6 @@ class Player:
         return True
 
     def on_attack(self, x, y):
-        # if cell is already attacked
-        if self.enemy_grid[x][y] > 0:
-            print("You already attacked this position")
-            return False
-
         # if there is a ship in this position
         if self.get_coordinate_state(x, y) == 1:
             ship = self.get_coordinate_ship(x, y)
