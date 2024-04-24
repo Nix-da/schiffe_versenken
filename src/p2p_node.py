@@ -1,13 +1,13 @@
 from pythonp2p import Node
 from pythonp2p.node import PORT
-from player import Player
+import player
 
 
 class P2PNode(Node):
 
     def __init__(self, host='localhost', player=None):
-        super().__init__(host)
         self.player = player
+        super().__init__(host)
         self.start()
 
     def on_message(self, message, sender, private):
