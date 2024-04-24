@@ -5,15 +5,26 @@ from player import Player
 from p2p_node import P2PNode
 
 
-def draw_grid(screen, game, type):
+def draw_grid(screen, grid, type):
     if type == "primary":
         block_size = PRIMARY_CELL_SIZE
         x_offset = PRIMARY_GRID_X
         y_offset = PRIMARY_GRID_Y
+        color_default = WHITE
+        color_ship = BLUE
+        color_hit = YELLOW
+        color_sunk = GREEN
+        color_miss = BLUE
     else:
         block_size = SECONDARY_CELL_SIZE
         x_offset = SECONDARY_GRID_X
         y_offset = SECONDARY_GRID_Y
+        color_default = WHITE
+        color_ship = GREEN
+        color_hit = YELLOW
+        color_sunk = RED
+        color_miss = BLUE
+
 
     GRID_SIZE = 10
 
@@ -25,14 +36,16 @@ def draw_grid(screen, game, type):
             rect = pygame.Rect(x_position, y_position, block_size, block_size)
 
             # color the cell according to the states cell
-            if game[x][y] == 0:
-                pygame.draw.rect(screen, WHITE, rect)
-            if game[x][y] == 1:
-                pygame.draw.rect(screen, BLUE, rect)
-            if game[x][y] == 2:
-                pygame.draw.rect(screen, RED, rect)
-            if game[x][y] == 3:
-                pygame.draw.rect(screen, GREEN, rect)
+            if grid[x][y] == 0:
+                pygame.draw.rect(screen, color_default, rect)
+            if grid[x][y] == 1:
+                pygame.draw.rect(screen, color_ship, rect)
+            if grid[x][y] == 2:
+                pygame.draw.rect(screen, color_hit, rect)
+            if grid[x][y] == 3:
+                pygame.draw.rect(screen, color_sunk, rect)
+            if grid[x][y] == 4:
+                pygame.draw.rect(screen, color_miss, rect)
 
             pygame.draw.rect(screen, BLACK, rect, 1)
 
