@@ -11,6 +11,7 @@ class P2PNode(Node):
         self.start()
 
     def on_message(self, message, sender, private):
+        print(f"Received message {message}")
         self.player.parse_message(message)
 
     def connect_to(self, host, port=PORT):
