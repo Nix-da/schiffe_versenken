@@ -121,7 +121,7 @@ while running:
             if event.button == 1:
                 # convert the screen position to grid position
                 x, y, type = get_cell(pos[0], pos[1])
-                print(get_cell(pos[0], pos[1]))
+                #print(get_cell(pos[0], pos[1]))
 
                 # if the position is on the primary grid, attack the enemy
                 if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0 and my_player.on_turn:
