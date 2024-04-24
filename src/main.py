@@ -71,7 +71,9 @@ enemy_ip = "172.16.123.32"
 
 
 my_player = Player("Player1")
-my_node = P2PNode(my_ip, my_player)
+my_node = P2PNode(my_ip)
+my_node.player = my_player
+my_node.connect_to(enemy_ip)
 
 
 print("Placing ships")
@@ -123,7 +125,7 @@ while running:
                 # if the position is on the primary grid, attack the enemy
                 if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0:
                     # send attack message to enemy and wait for response
-                    my_player.node.send_message("attack," + str(x) + "," + str(y))
+                    my_node.send_message("attack," + str(x) + "," + str(y))
                 # if the position is on the secondary grid, toggle the grids
                 if type == "secondary":
                     primary_own = not primary_own
