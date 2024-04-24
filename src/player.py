@@ -79,14 +79,14 @@ class Player:
                 print(ship.__class__.__name__ + " sunk!")
                 if all(ship.state == 3 for ship in self.get_ships_list()):
                     print("You lost!")
-                return "result,sunk," + str(x) + "," + str(y) + ship.__class__.__name__ + "," + str(ship.coordinates).replace(",", ";")
+                return "result;sunk;" + str(x) + ";" + str(y) + ship.__class__.__name__ + ";" + str(ship.coordinates)
             else:
                 self.grid[x][y] = 2
-                return "result,hit," + str(x) + "," + str(y)
+                return "result;hit;" + str(x) + ";" + str(y)
         # if there is no ship in this position
         else:
             #self.grid[x][y] = 1
-            return "result,miss," + str(x) + "," + str(y)
+            return "result;miss;" + str(x) + ";" + str(y)
 
     def get_coordinate_state(self, x, y):
         return self.grid[x][y]
@@ -103,7 +103,7 @@ class Player:
 
     def parse_message(self, message):
         try:
-            message = message.split(",")
+            message = message.split(";")
             # actions
             if message[0] == "action":
                 if message[1] == "attack":
@@ -122,7 +122,7 @@ class Player:
                     self.enemy_grid[int(message[2])][int(message[3])] = 2
                 if message[1] == "sunk":
                     print("sunk")
-                    for coord in message[5].strip('][').split('; '):
+                    for coord in message[5].strip('][').split(', '):
                         self.enemy_grid[int(coord[0])][int(coord[1])] = 3
 
         except:
