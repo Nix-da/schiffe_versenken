@@ -22,6 +22,8 @@ class Player:
         }
 
         self.node = None
+        self.on_turn = False
+
 
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
@@ -82,13 +84,14 @@ class Player:
                 print(ship.__class__.__name__ + " sunk!")
                 if all(ship.state == 3 for ship in self.get_ships_list()):
                     print("You win!")
-                return "sunk," + str(x) + "," + str(y) + ship.__class__.__name__ + "," + ship.coordinates
+                return "result,sunk," + str(x) + "," + str(y) + ship.__class__.__name__ + "," + ship.coordinates
             else:
                 self.grid[x][y] = 2
-                return "hit," + str(x) + "," + str(y)
+                return "result,hit," + str(x) + "," + str(y)
         # if there is no ship in this position
         else:
-            return "miss," + str(x) + "," + str(y)
+            #self.grid[x][y] = 1
+            return "result,miss," + str(x) + "," + str(y)
 
     def get_coordinate_state(self, x, y):
         return self.grid[x][y]
@@ -107,17 +110,19 @@ class Player:
         try:
             message = message.split(",")
             # actions
-            if message[0] == "attack":
-                result = self.on_attack(int(message[1]), int(message[2]))
-                self.node.send_message(result)
+            if message[0] == "action":
+                if message[1] == "attack":
+                    result = self.on_attack(int(message[2]), int(message[3]))
+                    self.node.send_message(result)
             # results
-            if message[0] == "miss":
-                self.enemy_grid[int(message[1])][int(message[2])] = 1
-            if message[0] == "hit":
-                self.enemy_grid[int(message[1])][int(message[2])] = 2
-            if message[0] == "sunk":
-                for coord in message[4:]:
-                    self.enemy_grid[int(coord[1])][int(coord[2])] = 3
+            if message[0] == "result":
+                if message[1] == "miss":
+                    self.enemy_grid[int(message[2])][int(message[3])] = 1
+                if message[1] == "hit":
+                    self.enemy_grid[int(message[2])][int(message[3])] = 2
+                if message[1] == "sunk":
+                    for coord in message[5].strip('][').split(', '):
+                        self.enemy_grid[int(coord[2])][int(coord[3])] = 3
 
         except:
             pass

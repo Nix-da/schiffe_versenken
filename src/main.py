@@ -126,7 +126,7 @@ while running:
                 # if the position is on the primary grid, attack the enemy
                 if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0:
                     # send attack message to enemy and wait for response
-                    my_node.send_message("attack," + str(x) + "," + str(y))
+                    my_node.send_message("action,attack," + str(x) + "," + str(y))
                 # if the position is on the secondary grid, toggle the grids
                 if type == "secondary":
                     primary_own = not primary_own
