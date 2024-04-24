@@ -22,7 +22,7 @@ class Player:
         }
 
         self.node = None
-        self.on_turn = False
+        self.on_turn = True
 
 
     def place_ship(self, ship, x, y, orientation):
@@ -113,9 +113,12 @@ class Player:
             if message[0] == "action":
                 if message[1] == "attack":
                     result = self.on_attack(int(message[2]), int(message[3]))
-                    self.node.send_message(result)
+                    if result:
+                        self.on_turn = True
+                        self.node.send_message(result)
             # results
             if message[0] == "result":
+                self.on_turn = False
                 if message[1] == "miss":
                     self.enemy_grid[int(message[2])][int(message[3])] = 1
                 if message[1] == "hit":

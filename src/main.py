@@ -124,7 +124,7 @@ while running:
                 print(get_cell(pos[0], pos[1]))
 
                 # if the position is on the primary grid, attack the enemy
-                if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0:
+                if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0 and my_player.on_turn:
                     # send attack message to enemy and wait for response
                     my_node.send_message("action,attack," + str(x) + "," + str(y))
                 # if the position is on the secondary grid, toggle the grids
