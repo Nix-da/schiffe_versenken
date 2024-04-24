@@ -110,19 +110,22 @@ class Player:
                     result = self.on_attack(int(message[2]), int(message[3]))
                     self.on_turn = True
                     print("your turn")
+                    print(" ")
+                    print(" ")
                     self.node.send_message(result)
             # results
             if message[0] == "result":
                 self.on_turn = False
                 if message[1] == "miss":
-                    print("missed")
+                    print("return missed")
                     self.enemy_grid[int(message[2])][int(message[3])] = 1
                 if message[1] == "hit":
-                    print("hit")
+                    print("return hit")
                     self.enemy_grid[int(message[2])][int(message[3])] = 2
                 if message[1] == "sunk":
-                    print("sunk")
+                    print("return sunk")
                     for coord in message[5].strip('][').split(', '):
+                        print(coord)
                         self.enemy_grid[int(coord[0])][int(coord[1])] = 3
 
         except:
