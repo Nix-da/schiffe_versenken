@@ -90,7 +90,7 @@ my_node.player = my_player
 my_node.connect_to(enemy_ip)
 
 
-print("Placing ships")
+print("Placing ships randomly...")
 for ship in my_player.get_ships_list():
     while not my_player.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
                                       np.random.choice(['horizontal', 'vertical'])):
@@ -134,7 +134,6 @@ while running:
             if event.button == 1:
                 # convert the screen position to grid position
                 x, y, type = get_cell(pos[0], pos[1])
-                print(get_cell(pos[0], pos[1]))
 
                 # if the position is on the primary grid, attack the enemy
                 if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0 and my_player.on_turn:

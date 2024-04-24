@@ -14,12 +14,10 @@ class P2PNode(Node):
     def on_message(self, message, sender, private):
         if not message == self.last_message:
             self.last_message = message
-            print(f"Received message {message}")
             self.player.parse_message(message)
 
     def connect_to(self, host, port=PORT):
         super().connect_to(host, port)
 
     def send_message(self, message, reciever=None):
-        print("her i am again")
         super().send_message(message, reciever)
