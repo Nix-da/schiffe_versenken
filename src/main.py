@@ -66,8 +66,8 @@ def get_cell(x, y):
     return x, y, type
 
 
-my_ip = "172.17.1.86"
-enemy_ip = "172.17.1.246"
+my_ip = "192.168.178.128"
+enemy_ip = "192.168.178.20"
 
 
 my_player = Player("Player1")
