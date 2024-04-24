@@ -97,8 +97,8 @@ screen.fill(WHITE)
 pygame.display.set_caption('Schiffe versenken')
 
 # Set the window icon
-icon = pygame.image.load('./assets/icon.png')
-pygame.display.set_icon(icon)
+#icon = pygame.image.load('./assets/icon.png')
+#pygame.display.set_icon(icon)
 
 primary_own = 1  # 0 = own field on top, 1 = enemy field on top
 state = 0  # 0 = placing ships, 1 = attacking, 2 = game over
