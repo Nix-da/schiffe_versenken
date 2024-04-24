@@ -4,7 +4,7 @@ from GUI_constants import *
 
 
 class Player:
-    def __init__(self, name, node):
+    def __init__(self, name):
         self.name = name
         self.grid = np.zeros((10, 10))
         self.enemy_grid = np.zeros((10, 10))
@@ -20,8 +20,6 @@ class Player:
             'destroyer': [Destroyer(), Destroyer(), Destroyer()],
             'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
         }
-
-        self.node = node
 
 
     def place_ship(self, ship, x, y, orientation):
