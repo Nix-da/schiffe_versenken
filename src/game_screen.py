@@ -18,7 +18,8 @@ def game_action(eventButton, game_type, player, enemy_player):
 
         # if the position is on the primary grid, attack the enemy
         if type == "primary":
-            if player.enemy_grid[x][y] == 0:
+            # but only if you are on turn and have not attacked this position before
+            if player.on_turn and player.enemy_grid[x][y] == 0:
                 if game_type == "bot":
                     player.attack_bot(enemy_player, x, y)
                 elif game_type == "multiplayer":
