@@ -5,7 +5,7 @@ def display_game_screen(screen, p1):
     draw_grid(screen, p1.enemy_grid, "primary")
     draw_grid(screen, p1.grid, "secondary")
     # draw legend
-    draw_legend(screen, "hits")
+    draw_legend(screen, "Your Hits")
 
 
 def game_action(eventButton, p1, p2):

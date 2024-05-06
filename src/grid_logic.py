@@ -8,7 +8,7 @@ enemy_ships_sunk = []
 def draw_legend(screen, legendTitle):
     legend_font = pygame.font.SysFont(None, 24)
     legend_text = legend_font.render(legendTitle, True, BLACK)
-    screen.blit(legend_text, (LEGEND_X, LEGEND_Y))
+    screen.blit(legend_text, (LEGEND_X + 40, LEGEND_Y))
 
     legend_y_offset = LEGEND_Y + 30
 
