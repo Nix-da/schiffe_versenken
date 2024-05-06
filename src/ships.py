@@ -16,6 +16,7 @@ class Ship(ABC):
     def get_length(self):
         pass
 
+
     def hit(self, x, y):
         index = self.coordinates.index((x, y))
         self.coordinate_states[index] = 2

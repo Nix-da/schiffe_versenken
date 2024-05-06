@@ -1,10 +1,15 @@
 import pygame
-import numpy as np
 from GUI_constants import *
+from game_screen import display_game_screen
+from game_screen import game_action
+from menu_screen import display_menu
+from menu_screen import bot_button_rect, multiplayer_button_rect
 from player import Player
 from p2p_node import P2PNode
 from random_player import RandomPlayer
 
+import numpy as np
+from place_ships_screen import display_place_ships_screen
 
 def draw_grid(screen, grid, type):
     if type == "primary":
@@ -27,32 +32,26 @@ def draw_grid(screen, grid, type):
         color_miss = BLUE
 
 
-    GRID_SIZE = 10
 
-    # generate a 10x10 grid
-    for x in range(GRID_SIZE):
-        x_position = x * block_size + x_offset
-        for y in range(GRID_SIZE):
-            y_position = y * block_size + y_offset
-            rect = pygame.Rect(x_position, y_position, block_size, block_size)
+p1 = Player("Player 1")
+for ship in p1.get_ships_list():
+    while not p1.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
+        pass
 
             # color the cell according to the states cell
-            if grid[x][y] == 0:
-                pygame.draw.rect(screen, color_default, rect)
-            if grid[x][y] == 1:
-                pygame.draw.rect(screen, color_ship, rect)
-            if grid[x][y] == 2:
-                pygame.draw.rect(screen, color_hit, rect)
-            if grid[x][y] == 3:
-                pygame.draw.rect(screen, color_sunk, rect)
-            if grid[x][y] == 4:
-                pygame.draw.rect(screen, color_miss, rect)
+            if game[x][y] == 0:
+                pygame.draw.rect(screen, WHITE, rect)
+            if game[x][y] == 1:
+                pygame.draw.rect(screen, BLUE, rect)
+            if game[x][y] == 2:
+                pygame.draw.rect(screen, RED, rect)
+            if game[x][y] == 3:
+                pygame.draw.rect(screen, GREEN, rect)
 
-            pygame.draw.rect(screen, BLACK, rect, 1)
-
-    # make the outline bold
-    rect = pygame.Rect(x_offset, y_offset, block_size * GRID_SIZE, block_size * GRID_SIZE)
-    pygame.draw.rect(screen, BLACK, rect, 3)
+p2 = Player("Player 2")
+for ship in p2.get_ships_list():
+    while not p2.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10), np.random.choice(['horizontal', 'vertical'])):
+        pass
 
 
 def get_cell(x, y):
@@ -110,6 +109,7 @@ pygame.init()
 # Set the dimensions of the window
 window_size = (WINDOW_SIZE_X, WINDOW_SIZE_Y)
 screen = pygame.display.set_mode(window_size)
+
 # fill the window with the color white
 screen.fill(WHITE)
 
@@ -121,7 +121,10 @@ icon = pygame.image.load('./assets/icon.png')
 pygame.display.set_icon(icon)
 
 primary_own = 1  # 0 = own field on top, 1 = enemy field on top
-state = 0  # 0 = placing ships, 1 = attacking, 2 = game over
+
+# initial screen-state
+current_state = "menu"
+
 
 # Main loop
 running = True
@@ -129,35 +132,36 @@ while running:
     # fill the window white
     screen.fill(WHITE)
 
-    # get key press events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    if current_state == "menu":
+        display_menu(screen)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-        # if button press is mouse click
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            # get position of the mouse on the screen
-            pos = pygame.mouse.get_pos()
-            if event.button == 1:
-                # convert the screen position to grid position
-                x, y, type = get_cell(pos[0], pos[1])
+            # if button press is mouse click
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if bot_button_rect.collidepoint(event.pos):
+                    # current_state = "place_ships"
+                    current_state = "game"
+                    print("Start Bot Game")
+                if multiplayer_button_rect.collidepoint(event.pos):
+                    # current_state = "place_ships"
+                    current_state = "game"
+                    print("Start Multiplayer Game")
+    elif current_state == "place_ships":
+        display_place_ships_screen(screen, p1)
+    elif current_state == "game":
+        display_game_screen(screen, p1)
+        # get key press events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-                # if the position is on the primary grid, attack the enemy
-                if type == "primary" and primary_own and my_player.enemy_grid[x][y] == 0 and my_player.on_turn:
-                    # send attack message to enemy and wait for response
-                    my_node.send_message("action;attack;" + str(x) + ";" + str(y))
-                # if the position is on the secondary grid, toggle the grids
-                if type == "secondary":
-                    primary_own = not primary_own
-                    print("Toggle primary and secondary grid")
-
-    # draw two grids
-    if primary_own == 0:
-        draw_grid(screen, my_player.grid, "primary")
-        draw_grid(screen, my_player.enemy_grid, "secondary")
-    else:
-        draw_grid(screen, my_player.enemy_grid, "primary")
-        draw_grid(screen, my_player.grid, "secondary")
+            # if button press is mouse click
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                game_action(event.button, p1, p2)
+    # elif current_state == "game_over":
+    #     display_game_over(screen)
 
     # refresh the display
     pygame.display.flip()

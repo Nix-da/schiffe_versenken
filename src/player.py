@@ -3,6 +3,8 @@ from ships import *
 from GUI_constants import *
 import ast
 
+from grid_logic import mark_as_hit_in_legend
+
 
 class Player:
     def __init__(self, name):
@@ -134,3 +136,5 @@ class Player:
 
         except:
             pass
+
+
