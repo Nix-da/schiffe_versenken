@@ -26,7 +26,7 @@ class RandomPlayer:
         self.on_turn = True
 
         for ship in self.get_ships_list():
-            while not self.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
+            while not self.place_ship(ship, np.random.randint(0, 9), np.random.randint(0, 9),
                                       np.random.choice(['horizontal', 'vertical'])):
                 pass
 

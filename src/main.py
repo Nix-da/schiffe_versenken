@@ -3,6 +3,7 @@ import numpy as np
 from GUI_constants import *
 from player import Player
 from p2p_node import P2PNode
+from random_player import RandomPlayer
 
 
 def draw_grid(screen, grid, type):
@@ -79,15 +80,21 @@ def get_cell(x, y):
     return min(x, GRID_SIZE), min(y, GRID_SIZE), type
 
 
-my_ip = "192.168.178.128"
-enemy_ip = "192.168.178.20"
+my_ip = "172.16.18.98"
+bot_ip = my_ip # "192.168.178.32"
 
 
 my_player = Player("Player1")
-my_node = P2PNode(my_ip)
+my_node = P2PNode(my_ip, 65433)
 my_player.node = my_node
 my_node.player = my_player
-my_node.connect_to(enemy_ip)
+my_node.connect_to(bot_ip)
+
+bot_player = RandomPlayer("Player2")
+bot_node = P2PNode(bot_ip)
+bot_player.node = bot_node
+bot_node.player = bot_player
+bot_node.connect_to(my_ip, 65433)
 
 
 print("Placing ships randomly...")
@@ -110,8 +117,8 @@ screen.fill(WHITE)
 pygame.display.set_caption('Schiffe versenken')
 
 # Set the window icon
-#icon = pygame.image.load('./assets/icon.png')
-#pygame.display.set_icon(icon)
+icon = pygame.image.load('./assets/icon.png')
+pygame.display.set_icon(icon)
 
 primary_own = 1  # 0 = own field on top, 1 = enemy field on top
 state = 0  # 0 = placing ships, 1 = attacking, 2 = game over
