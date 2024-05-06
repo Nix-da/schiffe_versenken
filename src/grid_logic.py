@@ -25,21 +25,25 @@ def draw_legend(screen, legendTitle):
 
     green_count = {ship_name: 0 for ship_name, _ in ships_data}
 
+    black_count = {ship_name: ship_count for ship_name, ship_count in ships_data}
 
     for ship_name, ship_count in ships_data:
         ship_class = ship_classes[ship_name]
         ship = ship_class()
         length = ship.get_length()
 
-        # Check if the ship class is present in the input ships_array
+        # Check if the ship class is present in enemy_ships_sunk
         if ship_name in enemy_ships_sunk:
-            color = GREEN  # Color green if present
             green_count[ship_name] = min(enemy_ships_sunk.count(ship_name), ship_count)
-        else:
-            color = BLACK  # Otherwise, color black
+            black_count[ship_name] -= green_count[ship_name]
 
-        # for _ in range(ship_count):
-        for _ in range(green_count[ship_name]):
+        # total count of legend items for a certain ship class
+        total_count = green_count[ship_name] + black_count[ship_name]
+
+        for _ in range(total_count):
+            # Determine the color of ships in legend based on the count
+            color = GREEN if _ < green_count[ship_name] else BLACK
+
             legend_x_offset = LEGEND_X + 20
             for _ in range(length):
                 pygame.draw.rect(screen, color, (legend_x_offset, legend_y_offset, LEGEND_CELL_SIZE, LEGEND_CELL_SIZE))
