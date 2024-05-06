@@ -2,8 +2,8 @@ import pygame
 from GUI_constants import *
 from ships import Battleship, Cruiser, Destroyer, Submarine
 
-
 enemy_ships_sunk = []
+
 
 def draw_legend(screen, legendTitle):
     legend_font = pygame.font.SysFont(None, 24)
@@ -24,7 +24,6 @@ def draw_legend(screen, legendTitle):
     ships_data = [("Battleship", 1), ("Cruiser", 2), ("Destroyer", 3), ("Submarine", 4)]
 
     green_count = {ship_name: 0 for ship_name, _ in ships_data}
-
 
     for ship_name, ship_count in ships_data:
         ship_class = ship_classes[ship_name]
@@ -57,12 +56,20 @@ def draw_grid(screen, game, type):
         block_size = PRIMARY_CELL_SIZE
         x_offset = PRIMARY_GRID_X
         y_offset = PRIMARY_GRID_Y
+        DEFAULT_COLOR = WHITE
+        SHIP_COLOR = BLUE
+        MISS_COLOR = GRAY
+        HIT_COLOR = RED
+        SUNK_COLOR = GREEN
     else:
         block_size = SECONDARY_CELL_SIZE
         x_offset = SECONDARY_GRID_X
         y_offset = SECONDARY_GRID_Y
-
-    GRID_SIZE = 10
+        DEFAULT_COLOR = WHITE
+        SHIP_COLOR = BLUE
+        MISS_COLOR = GRAY
+        HIT_COLOR = YELLOW
+        SUNK_COLOR = RED
 
     # generate a 10x10 grid
     for x in range(GRID_SIZE):
@@ -73,19 +80,22 @@ def draw_grid(screen, game, type):
 
             # color the cell according to the states cell
             if game[x][y] == 0:
-                pygame.draw.rect(screen, WHITE, rect)
+                pygame.draw.rect(screen, DEFAULT_COLOR, rect)
             if game[x][y] == 1:
-                pygame.draw.rect(screen, BLUE, rect)
+                pygame.draw.rect(screen, SHIP_COLOR, rect)
             if game[x][y] == 2:
-                pygame.draw.rect(screen, RED, rect)
+                pygame.draw.rect(screen, HIT_COLOR, rect)
             if game[x][y] == 3:
-                pygame.draw.rect(screen, GREEN, rect)
+                pygame.draw.rect(screen, SUNK_COLOR, rect)
+            if game[x][y] == 4:
+                pygame.draw.rect(screen, MISS_COLOR, rect)
 
             pygame.draw.rect(screen, BLACK, rect, 1)
 
     # make the outline bold
     rect = pygame.Rect(x_offset, y_offset, block_size * GRID_SIZE, block_size * GRID_SIZE)
     pygame.draw.rect(screen, BLACK, rect, 3)
+
 
 def get_cell(x, y):
     type = None
@@ -110,5 +120,3 @@ def get_cell(x, y):
     x = (x - x_offset) // block_size
     y = (y - y_offset) // block_size
     return x, y, type
-
-
