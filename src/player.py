@@ -142,6 +142,7 @@ class Player:
                     self.enemy_grid[int(message[2])][int(message[3])] = 2
                 if message[1] == "sunk":
                     print("sunk " + message[4])
+                    mark_as_hit_in_legend(message[4])
                     coords = ast.literal_eval(message[5])
                     for coord in coords:
                         print(coord)

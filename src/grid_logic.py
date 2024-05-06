@@ -46,8 +46,8 @@ def draw_legend(screen, legendTitle):
             legend_y_offset += 30
 
 
-def mark_as_hit_in_legend(enemy_ship):
-    enemy_ships_sunk.append(enemy_ship)
+def mark_as_hit_in_legend(ship):
+    enemy_ships_sunk.append(ship)
     print(enemy_ships_sunk)
 
 
