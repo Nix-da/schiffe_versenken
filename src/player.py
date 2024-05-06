@@ -97,16 +97,15 @@ class Player:
             return "result;miss;" + str(x) + ";" + str(y)
 
     def attack_bot(self, bot, x, y):
-        if self.enemy_grid[x][y] == 0:
-            print("I attack " + str(x) + " " + str(y))
-            self.parse_message(bot.on_attack(x, y))
-            x = np.random.randint(0, 9)
-            y = np.random.randint(0, 9)
-            while bot.enemy_grid[x][y] != 0:
-                x = np.random.randint(0, 9)
-                y = np.random.randint(0, 9)
-            print("Bot attacks " + str(x) + " " + str(y))
-            bot.parse_message(self.on_attack(x, y))
+        print("I attack " + str(x) + " " + str(y))
+        self.parse_message(bot.on_attack(x, y))
+        x = np.random.randint(0, 10)
+        y = np.random.randint(0, 10)
+        while bot.enemy_grid[x][y] != 0:
+            x = np.random.randint(0, 10)
+            y = np.random.randint(0, 10)
+        print("Bot attacks " + str(x) + " " + str(y))
+        bot.parse_message(self.on_attack(x, y))
 
     def get_coordinate_state(self, x, y):
         return self.grid[x][y]
