@@ -3,7 +3,7 @@ from GUI_constants import *
 from game_screen import display_game_screen
 from game_screen import game_action
 from menu_screen import display_menu
-from menu_screen import button_rect
+from menu_screen import bot_button_rect, multiplayer_button_rect
 from player import Player
 import numpy as np
 from place_ships_screen import display_place_ships_screen
@@ -84,10 +84,14 @@ while running:
 
             # if button press is mouse click
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if button_rect.collidepoint(event.pos):
+                if bot_button_rect.collidepoint(event.pos):
                     # current_state = "place_ships"
                     current_state = "game"
-                    print("Start Game")
+                    print("Start Bot Game")
+                if multiplayer_button_rect.collidepoint(event.pos):
+                    # current_state = "place_ships"
+                    current_state = "game"
+                    print("Start Multiplayer Game")
     elif current_state == "place_ships":
         display_place_ships_screen(screen, p1)
     elif current_state == "game":
