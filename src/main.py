@@ -15,9 +15,7 @@ my_player = None
 enemy_player = None
 
 my_ip = get_my_ip()
-my_port = 65432
-bot_ip = my_ip
-bot_port = my_port + 1
+bot_ip = '192.168.178.20'
 
 
 # Initialize the pygame
@@ -74,20 +72,18 @@ while running:
 
                     my_ip = get_my_ip()
                     enemy_ip = my_ip
-                    my_port = 65432
-                    enemy_port = 65433
 
                     my_player = Player("Player")
-                    my_node = P2PNode(my_ip, my_port)
+                    my_node = P2PNode(my_ip)
                     my_player.node = my_node
                     my_node.player = my_player
-                    my_node.connect_to(bot_ip, bot_port)
+                    my_node.connect_to(bot_ip)
 
                     enemy_player = Player("Bot")
-                    enemy_node = P2PNode(enemy_ip, enemy_port)
+                    enemy_node = P2PNode(enemy_ip)
                     enemy_player.node = enemy_node
                     enemy_node.player = enemy_player
-                    enemy_node.connect_to(my_ip, my_port)
+                    enemy_node.connect_to(my_ip)
 
     elif current_state == "place_ships":
         display_place_ships_screen(screen, my_player)

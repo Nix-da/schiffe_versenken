@@ -22,4 +22,4 @@ def game_action(eventButton, game_type, player, enemy_player):
                 if game_type == "bot":
                     player.attack_bot(enemy_player, x, y)
                 elif game_type == "multiplayer":
-                    player.node.send_message("action;attack" + str(x) + str(y))
+                    player.node.send_message("action;attack;" + str(x) + ";" + str(y))
