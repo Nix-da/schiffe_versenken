@@ -1,6 +1,8 @@
 import numpy as np
 from ships import *
 from GUI_constants import *
+from grid_logic import mark_as_hit_in_legend
+
 
 class Player:
     def __init__(self, name):
@@ -78,6 +80,7 @@ class Player:
                     for coord in enemy_ship.coordinates:
                         self.enemy_grid[coord[0]][coord[1]] = 3
                     print(enemy_ship.__class__.__name__ + " sunk!")
+                    mark_as_hit_in_legend(enemy_ship.__class__.__name__)
                     if all(ship.state == 3 for ship in enemy.get_ships_list()):
                         print("You win!")
                 else:
@@ -103,3 +106,5 @@ class Player:
 
     def get_ships_list(self):
         return [ship for ships in self.ships.values() for ship in ships]
+
+
