@@ -122,18 +122,29 @@ def get_cell(x, y):
     if SECONDARY_GRID_X <= x <= SECONDARY_GRID_X + SECONDARY_CELL_SIZE * GRID_SIZE:
         if SECONDARY_GRID_Y <= y <= SECONDARY_GRID_Y + SECONDARY_CELL_SIZE * GRID_SIZE:
             type = "secondary"
+    if LEGEND_X + 20 <= x <= LEGEND_X + (LEGEND_CELL_SIZE + 5) * 5 + 20:
+        if LEGEND_Y + 30 <= y <= LEGEND_Y + (LEGEND_CELL_SIZE + 10) * 10 + 30:
+            type = "legend"
 
     if type == "primary":
-        block_size = PRIMARY_CELL_SIZE
+        x_block_size = PRIMARY_CELL_SIZE
+        y_block_size = PRIMARY_CELL_SIZE
         x_offset = PRIMARY_GRID_X
         y_offset = PRIMARY_GRID_Y
     elif type == "secondary":
-        block_size = SECONDARY_CELL_SIZE
+        x_block_size = SECONDARY_CELL_SIZE
+        y_block_size = SECONDARY_CELL_SIZE
         x_offset = SECONDARY_GRID_X
         y_offset = SECONDARY_GRID_Y
+    elif type == "legend":
+        x_block_size = LEGEND_CELL_SIZE + 5
+        y_block_size = LEGEND_CELL_SIZE + 10
+        x_offset = LEGEND_X + 20
+        y_offset = LEGEND_Y + 30
     else:
         return 0, 0, None
 
-    x = (x - x_offset) // block_size
-    y = (y - y_offset) // block_size
+
+    x = (x - x_offset) // x_block_size
+    y = (y - y_offset) // y_block_size
     return x, y, type
