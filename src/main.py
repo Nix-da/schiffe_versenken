@@ -86,12 +86,8 @@ while running:
                 my_player.node = my_node
                 my_node.player = my_player
                 my_node.connect_to(enemy_ip)
-
                 enemy_player = Player("Opponent")
-                enemy_node = P2PNode(enemy_ip)
-                enemy_player.node = enemy_node
-                enemy_node.player = enemy_player
-                enemy_node.connect_to(my_ip)
+
 
     if current_state == "place_ships":
         display_place_ships_screen(screen, my_player)
