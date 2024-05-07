@@ -1,7 +1,6 @@
 import pygame
 from GUI_constants import *
-from game_screen import display_game_screen
-from game_screen import game_action
+from game_screen import display_game_screen, game_action, menu_button_rect
 from menu_screen import display_menu
 from menu_screen import bot_button_rect, multiplayer_button_rect
 from player import Player
@@ -75,7 +74,7 @@ while running:
                 running = False
 
             if multiplayer_connect_action(event) is not None:
-                current_state = "place_ships"
+                # current_state = "place_ships"
                 current_state = "game"
                 game_type = "multiplayer"
                 print("Start Multiplayer Game")
@@ -108,6 +107,9 @@ while running:
             # if button press is mouse click
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 game_action(event.button, game_type, my_player, enemy_player)
+
+                if menu_button_rect.collidepoint(event.pos):
+                    current_state = "menu"
         if my_player.game_over:
             current_state = "game_over"
 
