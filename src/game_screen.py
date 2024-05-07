@@ -4,19 +4,31 @@ from GUI_constants import *
 
 # Define button properties
 pygame.font.init()
+window_size = (WINDOW_SIZE_X, WINDOW_SIZE_Y)
+
 button_font = pygame.font.SysFont(None, 24)
+
 menu_text = button_font.render("Main Menu", True, WHITE)
 menu_button_rect = pygame.Rect(MENU_BUTTON_X, MENU_BUTTON_Y, MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT)
 menu_text_rect = menu_text.get_rect(center=menu_button_rect.center)
 
-def display_game_screen(screen, p1):
-    draw_grid(screen, p1.enemy_grid, "primary")
-    draw_grid(screen, p1.grid, "secondary")
+turn_font = pygame.font.SysFont(None, 24)
+turn_text = turn_font.render("Your turn!", True, BLACK)
+turn_text_rect = turn_text.get_rect(center=(PRIMARY_GRID_X + GRID_SIZE * PRIMARY_CELL_SIZE // 2, PRIMARY_GRID_Y - 50))
+
+
+def display_game_screen(screen, player):
+    draw_grid(screen, player.enemy_grid, "primary")
+    draw_grid(screen, player.grid, "secondary")
     # draw legend
     draw_legend(screen, "hits")
     # Draw the button
     pygame.draw.rect(screen, BLACK, menu_button_rect)
     screen.blit(menu_text, menu_text_rect)
+
+    if player.on_turn:
+        screen.blit(turn_text, turn_text_rect)
+
 
 def game_action(eventButton, game_type, player, enemy_player):
     # get position of the mouse on the screen
