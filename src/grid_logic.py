@@ -5,7 +5,7 @@ from ships import Battleship, Cruiser, Destroyer, Submarine
 enemy_ships_sunk = []
 
 
-def draw_legend(screen, legendTitle, ships_array=None):
+def draw_legend(screen, legendTitle, ships_array=None, selected_ship_index=None):
     if ships_array is None:
         ships_array = enemy_ships_sunk
     legend_font = pygame.font.SysFont(None, 24)
@@ -27,6 +27,7 @@ def draw_legend(screen, legendTitle, ships_array=None):
 
     green_count = {ship_name: 0 for ship_name, _ in ships_data}
 
+    total_ships = 0
     for ship_name, ship_count in ships_data:
         ship_class = ship_classes[ship_name]
         ship = ship_class()
@@ -40,9 +41,17 @@ def draw_legend(screen, legendTitle, ships_array=None):
             color = BLACK  # Otherwise, color black
 
         # for _ in range(ship_count):
-        for _ in range(green_count[ship_name]):
+
+        for i in range(green_count[ship_name]):
+            total_ships += 1
+
+            if selected_ship_index == total_ships - 1:
+                color = RED
+            else:
+                color = GREEN
+
             legend_x_offset = LEGEND_X + 20
-            for _ in range(length):
+            for j in range(length):
                 pygame.draw.rect(screen, color, (legend_x_offset, legend_y_offset, LEGEND_CELL_SIZE, LEGEND_CELL_SIZE))
                 legend_x_offset += LEGEND_CELL_SIZE + 5
             legend_y_offset += 30
