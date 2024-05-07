@@ -9,13 +9,14 @@ from p2p_node import P2PNode, get_my_ip
 from random_player import RandomPlayer
 import numpy as np
 from place_ships_screen import display_place_ships_screen
+from multiplayer_connect_screen import display_multiplayer_connect_screen, multiplayer_connect_action
 
 
 my_player = None
 enemy_player = None
 
 my_ip = get_my_ip()
-bot_ip = '192.168.178.20'
+enemy_ip = None
 
 
 # Initialize the pygame
@@ -65,29 +66,39 @@ while running:
                     enemy_player = RandomPlayer("Bot")
 
                 if multiplayer_button_rect.collidepoint(event.pos):
-                    # current_state = "place_ships"
-                    current_state = "game"
-                    game_type = "multiplayer"
-                    print("Start Multiplayer Game")
+                    current_state = "multiplayer connect"
 
-                    my_ip = get_my_ip()
-                    enemy_ip = my_ip
+    if current_state == "multiplayer connect":
+        display_multiplayer_connect_screen(screen)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-                    my_player = Player("Player")
-                    my_node = P2PNode(my_ip)
-                    my_player.node = my_node
-                    my_node.player = my_player
-                    my_node.connect_to(bot_ip)
+            if multiplayer_connect_action(event) is not None:
+                current_state = "place_ships"
+                current_state = "game"
+                game_type = "multiplayer"
+                print("Start Multiplayer Game")
 
-                    enemy_player = Player("Bot")
-                    enemy_node = P2PNode(enemy_ip)
-                    enemy_player.node = enemy_node
-                    enemy_node.player = enemy_player
-                    enemy_node.connect_to(my_ip)
+                my_ip = get_my_ip()
+                enemy_ip = multiplayer_connect_action(event)
 
-    elif current_state == "place_ships":
+                my_player = Player("Player")
+                my_node = P2PNode(my_ip)
+                my_player.node = my_node
+                my_node.player = my_player
+                my_node.connect_to(enemy_ip)
+
+                enemy_player = Player("Opponent")
+                enemy_node = P2PNode(enemy_ip)
+                enemy_player.node = enemy_node
+                enemy_node.player = enemy_player
+                enemy_node.connect_to(my_ip)
+
+    if current_state == "place_ships":
         display_place_ships_screen(screen, my_player)
-    elif current_state == "game":
+
+    if current_state == "game":
         display_game_screen(screen, my_player)
         # get key press events
         for event in pygame.event.get():
