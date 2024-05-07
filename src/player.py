@@ -17,12 +17,6 @@ class Player:
             'destroyer': [Destroyer(), Destroyer(), Destroyer()],
             'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
         }
-        self.enemy_ships = {
-            'battleship': [Battleship()],
-            'cruiser': [Cruiser(), Cruiser()],
-            'destroyer': [Destroyer(), Destroyer(), Destroyer()],
-            'submarine': [Submarine(), Submarine(), Submarine(), Submarine()]
-        }
 
         self.node = None
         self.on_turn = True
@@ -97,6 +91,7 @@ class Player:
                 print(ship.__class__.__name__ + " sunk!")
                 if self.all_ships_sunk():
                     self.game_over = "You lost!"
+                    self.node.send_message("result;win")
                 return "result;sunk;" + str(x) + ";" + str(y) + ";" + ship.__class__.__name__ + ";" + str(ship.coordinates)
             else:
                 self.grid[x][y] = 2
@@ -144,28 +139,25 @@ class Player:
             if message[0] == "action":
                 if message[1] == "attack":
                     result = self.on_attack(int(message[2]), int(message[3]))
-                    self.on_turn = True
-                    print("")
-                    print("your turn")
                     self.node.send_message(result)
+                    self.on_turn = True
             # results
             if message[0] == "result":
                 self.on_turn = False
                 if message[1] == "miss":
-                    #print("return missed")
+                    print("missed")
                     self.enemy_grid[int(message[2])][int(message[3])] = 1
                 if message[1] == "hit":
-                    #print("return hit")
+                    print("hit")
                     self.enemy_grid[int(message[2])][int(message[3])] = 2
                 if message[1] == "sunk":
                     print("sunk " + message[4])
                     mark_as_hit_in_legend(message[4])
                     coords = ast.literal_eval(message[5])
                     for coord in coords:
-                        print(coord)
                         self.enemy_grid[coord[0]][coord[1]] = 3
                 if message[1] == "win":
-                    self.on_turn = False
                     self.game_over = "You won!"
+                    self.on_turn = False
         except:
             pass
