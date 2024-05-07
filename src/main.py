@@ -6,7 +6,7 @@ from menu_screen import display_menu
 from menu_screen import bot_button_rect, multiplayer_button_rect
 from player import Player
 import numpy as np
-from place_ships_screen import display_place_ships_screen
+from place_ships_screen import display_place_ships_screen, random_button_rect, start_game_button_rect
 
 
 
@@ -85,8 +85,8 @@ while running:
             # if button press is mouse click
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if bot_button_rect.collidepoint(event.pos):
-                    # current_state = "place_ships"
-                    current_state = "game"
+                    current_state = "place_ships"
+                    # current_state = "game"
                     print("Start Bot Game")
                 if multiplayer_button_rect.collidepoint(event.pos):
                     # current_state = "place_ships"
@@ -94,6 +94,18 @@ while running:
                     print("Start Multiplayer Game")
     elif current_state == "place_ships":
         display_place_ships_screen(screen, p1)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            # if button press is mouse click
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if random_button_rect.collidepoint(event.pos):
+                    current_state = "place_ships"
+                    print("Random Placement of Ships")
+                if start_game_button_rect.collidepoint(event.pos):
+                    current_state = "game"
+                    print("Start Game")
     elif current_state == "game":
         display_game_screen(screen, p1)
         # get key press events
