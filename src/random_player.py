@@ -71,6 +71,14 @@ class RandomPlayer:
                     return False
         return True
 
+    def all_ships_sunk(self):
+        for ships in self.ships.values():
+            for ship in ships:
+                if ship.state != 3:
+                    return False
+        return True
+
+
     def on_attack(self, x, y):
         # if there is a ship in this position
         if self.get_coordinate_state(x, y) >= 1:

@@ -7,7 +7,7 @@ from menu_screen import bot_button_rect, multiplayer_button_rect
 from player import Player
 from p2p_node import P2PNode, get_my_ip
 from random_player import RandomPlayer
-import numpy as np
+from game_over_screen import display_game_over_screen, game_over_action
 from place_ships_screen import display_place_ships_screen
 from multiplayer_connect_screen import display_multiplayer_connect_screen, multiplayer_connect_action
 
@@ -108,8 +108,19 @@ while running:
             # if button press is mouse click
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 game_action(event.button, game_type, my_player, enemy_player)
-    # elif current_state == "game_over":
-    #     display_game_over(screen)
+        if my_player.game_over:
+            current_state = "game_over"
+
+    elif current_state == "game_over":
+        display_game_over_screen(screen, my_player.game_over)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            # if button press is mouse click
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if game_over_action(event.button) == "menu":
+                    current_state = "menu"
 
     # refresh the display
     pygame.display.flip()

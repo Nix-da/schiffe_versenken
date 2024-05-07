@@ -27,6 +27,8 @@ class Player:
         self.node = None
         self.on_turn = True
 
+        self.game_over = None
+
         print("Placing ships randomly...")
         for ship in self.get_ships_list():
             while not self.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
@@ -74,6 +76,14 @@ class Player:
                     return False
         return True
 
+    def all_ships_sunk(self):
+        for ships in self.ships.values():
+            for ship in ships:
+                if ship.state != 3:
+                    return False
+        return True
+
+
     def on_attack(self, x, y):
         # if there is a ship in this position
         if self.get_coordinate_state(x, y) >= 1:
@@ -85,8 +95,8 @@ class Player:
                 for coord in ship.coordinates:
                     self.grid[coord[0]][coord[1]] = 3
                 print(ship.__class__.__name__ + " sunk!")
-                if all(ship.state == 3 for ship in self.get_ships_list()):
-                    print("You lost!")
+                if self.all_ships_sunk():
+                    self.game_over = "You lost!"
                 return "result;sunk;" + str(x) + ";" + str(y) + ";" + ship.__class__.__name__ + ";" + str(ship.coordinates)
             else:
                 self.grid[x][y] = 2
@@ -99,6 +109,7 @@ class Player:
     def attack_bot(self, bot, x, y):
         print("I attack " + str(x) + " " + str(y))
         self.parse_message(bot.on_attack(x, y))
+
         x = np.random.randint(0, 10)
         y = np.random.randint(0, 10)
         while bot.enemy_grid[x][y] != 0:
@@ -106,7 +117,12 @@ class Player:
             y = np.random.randint(0, 10)
         print("Bot attacks " + str(x) + " " + str(y))
         bot.parse_message(self.on_attack(x, y))
+
         self.on_turn = True
+        if self.all_ships_sunk():
+            self.game_over = "You lost!"
+        if bot.all_ships_sunk():
+            self.game_over = "You won!"
 
     def get_coordinate_state(self, x, y):
         return self.grid[x][y]
@@ -150,5 +166,6 @@ class Player:
                         self.enemy_grid[coord[0]][coord[1]] = 3
                 if message[1] == "win":
                     self.on_turn = False
+                    self.game_over = "You won!"
         except:
             pass
