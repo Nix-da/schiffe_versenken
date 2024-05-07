@@ -1,3 +1,4 @@
+import numpy as np
 import pygame
 from GUI_constants import *
 from game_screen import display_game_screen, game_action, menu_button_rect
@@ -7,9 +8,9 @@ from player import Player
 from p2p_node import P2PNode, get_my_ip
 from random_player import RandomPlayer
 from game_over_screen import display_game_over_screen, game_over_action
-from place_ships_screen import display_place_ships_screen
+from place_ships_screen import display_place_ships_screen, place_ship_action, vertical_button_rect, \
+    placement_orientation, start_game_button_rect, random_button_rect
 from multiplayer_connect_screen import display_multiplayer_connect_screen, multiplayer_connect_action
-from grid_logic import enemy_ships_sunk
 
 
 my_player = None
@@ -91,8 +92,6 @@ while running:
 
     if current_state == "place_ships":
         display_place_ships_screen(screen, my_player, [ship.__class__.__name__ for ship in my_player.get_not_placed_ship_list()])
-        if my_player.all_ships_placed():
-            current_state = "game"
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -101,7 +100,18 @@ while running:
             # if button press is mouse click
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    my_player.place_ship(event.button)
+                    place_ship_action(event.button, my_player)
+                if vertical_button_rect.collidepoint(event.pos):
+                    placement_orientation = "horizontal" if placement_orientation == "vertical" else "vertical"
+                if random_button_rect.collidepoint(event.pos):
+                    while not my_player.all_ships_placed():
+                        my_player.place_ship(my_player.get_not_placed_ship_list()[0], np.random.randint(0, 9), np.random.randint(0, 9), np.random.choice(["horizontal", "vertical"]))
+                if start_game_button_rect.collidepoint(event.pos):
+                    if my_player.all_ships_placed():
+                        current_state = "game"
+                if menu_button_rect.collidepoint(event.pos):
+                    current_state = "menu"
+
 
     if current_state == "game":
         display_game_screen(screen, my_player)

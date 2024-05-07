@@ -1,11 +1,15 @@
 # Colors
 BLACK = (0, 0, 0)
 GRAY = (128, 128, 128, 128)
+LIGHT_GRAY = (200, 200, 200)
 WHITE = (255, 255, 255)
 RED = (189, 25, 25)
+DARK_RED = (128, 0, 0)
 YELLOW = (189, 189, 25)
 GREEN = (25, 189, 25)
+DARK_GREEN = (0, 128, 0)
 BLUE = (25, 25, 189)
+DAR_BLUE = (0, 0, 128)
 
 # Positions and dimension
 # Window size

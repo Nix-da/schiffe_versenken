@@ -54,8 +54,16 @@ class Player:
                 ship.coordinates.append((y + i, x))
                 ship.coordinate_states.append(1)
         ship.state = 1
-        # print("placed ship at" + str((x, y)) + " with orientation " + orientation)
+        orientation_print = "vertical" if orientation == 'horizontal' else "horizontal"
+        print("placed ship" + ship.__class__.__name__ + " at " + chr(65 + x) + " " + str(y + 1) + " with orientation " + orientation_print)
         return True
+
+    def unplace_ship(self, ship):
+        for coord in ship.coordinates:
+            self.grid[coord[0]][coord[1]] = 0
+        ship.coordinates = []
+        ship.coordinate_states = []
+        ship.state = 0
 
     def all_ships_placed(self):
         for ships in self.ships.values():
@@ -126,6 +134,12 @@ class Player:
 
     def get_ships_list(self):
         return [ship for ships in self.ships.values() for ship in ships]
+
+    def get_placed_ship_list(self):
+        return [ship for ships in self.ships.values() for ship in ships if ship.state == 1]
+
+    def get_not_placed_ship_list(self):
+        return [ship for ships in self.ships.values() for ship in ships if ship.state == 0]
 
     def parse_message(self, message):
         try:
