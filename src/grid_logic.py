@@ -102,14 +102,14 @@ def draw_grid(screen, game, type):
         for x in range(GRID_SIZE):
             x_position = x * block_size + x_offset + block_size // 2
             text = font.render(str(x + 1), True, BLACK)
-            text_rect = text.get_rect(center=(x_position, y_offset // 2 + 12))
+            text_rect = text.get_rect(center=(x_position, y_offset // 2 + (PRIMARY_GRID_Y // 2 - 12)))
             screen.blit(text, text_rect)
 
         # Write letters
         for y in range(GRID_SIZE):
             y_position = y * block_size + y_offset + block_size // 2
             text = font.render(chr(y + 65), True, BLACK)
-            text_rect = text.get_rect(center=(x_offset // 2 + 12, y_position))
+            text_rect = text.get_rect(center=(x_offset // 2 + (PRIMARY_GRID_X // 2 - 12), y_position))
             screen.blit(text, text_rect)
 
 
