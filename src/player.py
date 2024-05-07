@@ -23,12 +23,6 @@ class Player:
 
         self.game_over = None
 
-        print("Placing ships randomly...")
-        for ship in self.get_ships_list():
-            while not self.place_ship(ship, np.random.randint(0, 10), np.random.randint(0, 10),
-                                           np.random.choice(['horizontal', 'vertical'])):
-                pass
-
     def place_ship(self, ship, x, y, orientation):
         if orientation == 'horizontal':
             if x + ship.length > 10:
@@ -77,7 +71,6 @@ class Player:
                     return False
         return True
 
-
     def on_attack(self, x, y):
         # if there is a ship in this position
         if self.get_coordinate_state(x, y) >= 1:
@@ -92,7 +85,8 @@ class Player:
                     self.game_over = "You lost!"
                     print("You lost!")
                     self.node.send_message("result;win")
-                return "result;sunk;" + str(x) + ";" + str(y) + ";" + ship.__class__.__name__ + ";" + str(ship.coordinates)
+                return "result;sunk;" + str(x) + ";" + str(y) + ";" + ship.__class__.__name__ + ";" + str(
+                    ship.coordinates)
             else:
                 self.grid[x][y] = 2
                 return "result;hit;" + str(x) + ";" + str(y)
