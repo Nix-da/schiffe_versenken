@@ -74,8 +74,7 @@ while running:
                 running = False
 
             if multiplayer_connect_action(event) is not None:
-                # current_state = "place_ships"
-                current_state = "game"
+                current_state = "place_ships"
                 game_type = "multiplayer"
                 print("Start Multiplayer Game")
 
@@ -96,6 +95,8 @@ while running:
 
     if current_state == "place_ships":
         display_place_ships_screen(screen, my_player)
+        if my_player.all_ships_placed():
+            current_state = "game"
 
     if current_state == "game":
         display_game_screen(screen, my_player)
