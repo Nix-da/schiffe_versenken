@@ -96,6 +96,7 @@ class Player:
             return "result;miss;" + str(x) + ";" + str(y)
 
     def attack_bot(self, bot, x, y):
+        print("")
         print("I attack " + chr(65 + y) + " " + str(x))
         self.parse_message(bot.on_attack(x, y))
 

@@ -140,12 +140,13 @@ class RandomPlayer:
             if message[0] == "result":
                 self.on_turn = False
                 if message[1] == "miss":
-                    # print("return missed")
+                    print("miss")
                     self.enemy_grid[int(message[2])][int(message[3])] = 1
                 if message[1] == "hit":
-                    # print("return hit")
+                    print("hit")
                     self.enemy_grid[int(message[2])][int(message[3])] = 2
                 if message[1] == "sunk":
+                    print("hit")
                     print("sunk " + message[4])
                     coords = ast.literal_eval(message[5])
                     for coord in coords:
