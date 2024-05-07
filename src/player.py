@@ -106,6 +106,7 @@ class Player:
             y = np.random.randint(0, 10)
         print("Bot attacks " + str(x) + " " + str(y))
         bot.parse_message(self.on_attack(x, y))
+        self.on_turn = True
 
     def get_coordinate_state(self, x, y):
         return self.grid[x][y]
