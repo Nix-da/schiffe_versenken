@@ -8,7 +8,7 @@ enemy_ships_sunk = []
 def draw_legend(screen, legendTitle):
     legend_font = pygame.font.SysFont(None, 24)
     legend_text = legend_font.render(legendTitle, True, BLACK)
-    screen.blit(legend_text, (LEGEND_X, LEGEND_Y))
+    screen.blit(legend_text, (LEGEND_X + 20, LEGEND_Y))
 
     legend_y_offset = LEGEND_Y + 30
 
@@ -95,6 +95,22 @@ def draw_grid(screen, game, type):
     # make the outline bold
     rect = pygame.Rect(x_offset, y_offset, block_size * GRID_SIZE, block_size * GRID_SIZE)
     pygame.draw.rect(screen, BLACK, rect, 3)
+
+    if type == "primary":
+        font = pygame.font.SysFont(None, 24)
+        # Write numbers
+        for x in range(GRID_SIZE):
+            x_position = x * block_size + x_offset + block_size // 2
+            text = font.render(str(x + 1), True, BLACK)
+            text_rect = text.get_rect(center=(x_position, y_offset // 2 + 12))
+            screen.blit(text, text_rect)
+
+        # Write letters
+        for y in range(GRID_SIZE):
+            y_position = y * block_size + y_offset + block_size // 2
+            text = font.render(chr(y + 65), True, BLACK)
+            text_rect = text.get_rect(center=(x_offset // 2 + 12, y_position))
+            screen.blit(text, text_rect)
 
 
 def get_cell(x, y):
