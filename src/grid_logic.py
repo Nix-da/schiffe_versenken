@@ -5,7 +5,9 @@ from ships import Battleship, Cruiser, Destroyer, Submarine
 enemy_ships_sunk = []
 
 
-def draw_legend(screen, legendTitle):
+def draw_legend(screen, legendTitle, ships_array=None):
+    if ships_array is None:
+        ships_array = enemy_ships_sunk
     legend_font = pygame.font.SysFont(None, 24)
     legend_text = legend_font.render(legendTitle, True, BLACK)
     screen.blit(legend_text, (LEGEND_X + 20, LEGEND_Y))
@@ -31,9 +33,9 @@ def draw_legend(screen, legendTitle):
         length = ship.get_length()
 
         # Check if the ship class is present in the input ships_array
-        if ship_name in enemy_ships_sunk:
+        if ship_name in ships_array:
             color = GREEN  # Color green if present
-            green_count[ship_name] = min(enemy_ships_sunk.count(ship_name), ship_count)
+            green_count[ship_name] = min(ships_array.count(ship_name), ship_count)
         else:
             color = BLACK  # Otherwise, color black
 

@@ -9,6 +9,7 @@ from random_player import RandomPlayer
 from game_over_screen import display_game_over_screen, game_over_action
 from place_ships_screen import display_place_ships_screen
 from multiplayer_connect_screen import display_multiplayer_connect_screen, multiplayer_connect_action
+from grid_logic import enemy_ships_sunk
 
 
 my_player = None
@@ -57,7 +58,7 @@ while running:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if bot_button_rect.collidepoint(event.pos):
                     # current_state = "place_ships"
-                    current_state = "game"
+                    current_state = "place_ships"
                     game_type = "bot"
                     print("Start Bot Game")
 
@@ -88,11 +89,19 @@ while running:
                 my_node.connect_to(enemy_ip)
                 enemy_player = Player("Opponent")
 
-
     if current_state == "place_ships":
-        display_place_ships_screen(screen, my_player)
+        display_place_ships_screen(screen, my_player, [ship.__class__.__name__ for ship in my_player.get_not_placed_ship_list()])
         if my_player.all_ships_placed():
             current_state = "game"
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            # if button press is mouse click
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    my_player.place_ship(event.button)
 
     if current_state == "game":
         display_game_screen(screen, my_player)
