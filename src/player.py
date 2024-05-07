@@ -102,7 +102,7 @@ class Player:
             return "result;miss;" + str(x) + ";" + str(y)
 
     def attack_bot(self, bot, x, y):
-        print("I attack " + str(x) + " " + str(y))
+        print("I attack " + chr(65 + y) + " " + str(x))
         self.parse_message(bot.on_attack(x, y))
 
         x = np.random.randint(0, 10)
@@ -110,7 +110,7 @@ class Player:
         while bot.enemy_grid[x][y] != 0:
             x = np.random.randint(0, 10)
             y = np.random.randint(0, 10)
-        print("Bot attacks " + str(x) + " " + str(y))
+        print("Bot attacks " + chr(65 + y) + " " + str(x))
         bot.parse_message(self.on_attack(x, y))
 
         self.on_turn = True
@@ -147,12 +147,13 @@ class Player:
             if message[0] == "result":
                 self.on_turn = False
                 if message[1] == "miss":
-                    print("missed")
+                    print("miss")
                     self.enemy_grid[int(message[2])][int(message[3])] = 1
                 if message[1] == "hit":
                     print("hit")
                     self.enemy_grid[int(message[2])][int(message[3])] = 2
                 if message[1] == "sunk":
+                    print("hit")
                     print("sunk " + message[4])
                     mark_as_hit_in_legend(message[4])
                     coords = ast.literal_eval(message[5])
