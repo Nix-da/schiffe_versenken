@@ -88,9 +88,9 @@ class Player:
             if ship.state == 3:
                 for coord in ship.coordinates:
                     self.grid[coord[0]][coord[1]] = 3
-                print(ship.__class__.__name__ + " sunk!")
                 if self.all_ships_sunk():
                     self.game_over = "You lost!"
+                    print("You lost!")
                     self.node.send_message("result;win")
                 return "result;sunk;" + str(x) + ";" + str(y) + ";" + ship.__class__.__name__ + ";" + str(ship.coordinates)
             else:
@@ -141,6 +141,8 @@ class Player:
                     result = self.on_attack(int(message[2]), int(message[3]))
                     self.node.send_message(result)
                     self.on_turn = True
+                    print("")
+                    print("Your turn!")
             # results
             if message[0] == "result":
                 self.on_turn = False
@@ -157,6 +159,7 @@ class Player:
                     for coord in coords:
                         self.enemy_grid[coord[0]][coord[1]] = 3
                 if message[1] == "win":
+                    print("You win!")
                     self.game_over = "You won!"
                     self.on_turn = False
         except:
