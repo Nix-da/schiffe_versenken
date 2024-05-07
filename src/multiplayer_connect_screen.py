@@ -57,7 +57,7 @@ def multiplayer_connect_action(event):
             active = False
         color = color_active if active else color_inactive
     elif event.type == pygame.KEYDOWN:
-        if event.unicode in '0123456789.':
+        if event.unicode in '0123456789.' or event.key == pygame.K_BACKSPACE:
             if active:
                 if event.key == pygame.K_BACKSPACE:
                     text = text[:-1]
