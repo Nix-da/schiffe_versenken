@@ -1,5 +1,6 @@
 import numpy as np
 import pygame
+import requests
 from GUI_constants import *
 from game_screen import display_game_screen, game_action, menu_button_rect
 from menu_screen import display_menu
@@ -12,7 +13,6 @@ from place_ships_screen import display_place_ships_screen, place_ship_action, ve
     placement_orientation, start_game_button_rect, random_button_rect
 from multiplayer_connect_screen import display_multiplayer_connect_screen, multiplayer_connect_action
 from flask_server import app
-
 
 my_player = None
 enemy_player = None
@@ -47,6 +47,7 @@ game_type = "bot"
 # Main loop
 running = True
 while running:
+
     # fill the window white
     screen.fill(WHITE)
 
