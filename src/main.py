@@ -11,6 +11,7 @@ from game_over_screen import display_game_over_screen, game_over_action
 from place_ships_screen import display_place_ships_screen, place_ship_action, vertical_button_rect, \
     placement_orientation, start_game_button_rect, random_button_rect
 from multiplayer_connect_screen import display_multiplayer_connect_screen, multiplayer_connect_action
+from flask_server import app
 
 
 my_player = None
@@ -111,7 +112,6 @@ while running:
                         current_state = "game"
                 if menu_button_rect.collidepoint(event.pos):
                     current_state = "menu"
-
 
     if current_state == "game":
         display_game_screen(screen, my_player)
