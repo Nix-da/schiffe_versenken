@@ -12,6 +12,4 @@ def hello():
     return speech_text
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)  # Wichtig: '0.0.0.0' macht den Server für externe Anfragen erreichbar
-
-#app.run(port=5001)
+    app.run(port=5001)
