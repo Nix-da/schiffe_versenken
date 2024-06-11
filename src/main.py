@@ -11,8 +11,7 @@ from game_over_screen import display_game_over_screen, game_over_action
 from place_ships_screen import display_place_ships_screen, place_ship_action, vertical_button_rect, \
     placement_orientation, start_game_button_rect, random_button_rect
 from multiplayer_connect_screen import display_multiplayer_connect_screen, multiplayer_connect_action
-from flask_server import app
-
+from flask_server import app, get_skill_message
 
 my_player = None
 enemy_player = None
@@ -47,6 +46,7 @@ game_type = "bot"
 # Main loop
 running = True
 while running:
+    voice_action = get_skill_message()
     # fill the window white
     screen.fill(WHITE)
 

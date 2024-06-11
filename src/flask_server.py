@@ -2,6 +2,13 @@ from flask import Flask, jsonify
 import threading
 import os
 
+skill_message = []
+
+
+def get_skill_message():
+    return skill_message.pop(0)
+
+
 app = Flask(__name__)
 
 
@@ -16,8 +23,6 @@ def hello2():
     speech_text = {"message": "Hello2"}
     return jsonify(speech_text)
 
-
-import subprocess
 
 def run_server():
     # Start the Flask server in a new thread
