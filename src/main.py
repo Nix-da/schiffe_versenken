@@ -85,11 +85,21 @@ def start_game_phase():
     if my_player.all_ships_placed():
         current_state = "game"
 
+
 def place_ships_random():
     global my_player
     while not my_player.all_ships_placed():
         my_player.place_ship(my_player.get_not_placed_ship_list()[0], np.random.randint(0, 9),
                              np.random.randint(0, 9), np.random.choice(["horizontal", "vertical"]))
+
+
+def attack(x, y):
+    global enemy_player, my_player
+    if my_player.on_turn and my_player.enemy_grid[x][y] == 0:
+        if game_type == "bot":
+            my_player.attack_bot(enemy_player, x, y)
+        elif game_type == "multiplayer":
+            my_player.node.send_message("action;attack;" + str(x) + ";" + str(y))
 
 
 # Main loop
@@ -165,6 +175,17 @@ while running:
     if current_state == "game":
         if voice_action is not None and voice_action == "restart":
             back_to_menu()
+        if voice_action is not None and voice_action.startswith("attack"):
+            xy = voice_action.split(" ")[-1]
+            if xy[0].isdigit():
+                x = ord(xy[1]) - 65
+                y = int(xy[0]) - 1
+            else:
+                x = ord(xy[0]) - 65
+                y = int(xy[1]) - 1
+
+            attack(y, x)
+
 
         display_game_screen(screen, my_player)
         # get key press events

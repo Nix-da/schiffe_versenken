@@ -4,6 +4,7 @@ import os
 
 skill_message = []
 enemy_ip = None
+attack_result = None
 
 
 def get_skill_message():
@@ -24,8 +25,10 @@ def hello():
 
 @app.route('/attack/<field>')
 def attack(field):
-    speech_text = {"message": "Hello2"}
-    return jsonify(field)
+    global skill_message
+    skill_message.append("attack " + field)
+    speech_text = attack_result
+    return field
 
 
 @app.route('/mode/<mode>')
