@@ -1,10 +1,12 @@
+from time import sleep
+
 from flask import Flask, jsonify
 import threading
 import os
 
 skill_message = []
+attack_result = []
 enemy_ip = None
-attack_result = None
 
 
 def get_skill_message():
@@ -27,8 +29,11 @@ def hello():
 def attack(field):
     global skill_message
     skill_message.append("attack " + field)
-    speech_text = attack_result
-    return field
+    speech_text = "Angriff auf " + field + ""
+    sleep(1)
+    if attack_result:
+        speech_text += attack_result.pop(0)
+    return speech_text
 
 
 @app.route('/mode/<mode>')
@@ -69,17 +74,10 @@ def start_game():
 
 @app.route('/set_ip/<ip>')
 def set_ip(ip):
-    global enemy_ip
+    global enemy_ip, skill_message
     enemy_ip = ip
-    speech_text = "Die IP wurde gesetzt."
-    return speech_text
-
-
-@app.route('/connect')
-def connect():
-    global skill_message, enemy_ip
     skill_message.append("connect to " + str(enemy_ip))
-    speech_text = "Die Verbindung wird hergestellt."
+    speech_text = "Die IP wurde gesetzt."
     return speech_text
 
 
