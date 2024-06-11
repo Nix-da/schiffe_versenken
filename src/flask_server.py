@@ -31,12 +31,15 @@ def attack(field):
 @app.route('/mode/<mode>')
 def mode(mode):
     global skill_message
-    if mode == "bot modus":
+    if mode in ["bot modus", "bot mode"]:
         skill_message.append("bot modus")
-        speech_text = "Das Spiel wird im Bot Modus gestartet. Bitte platziere deine Schiffe."
-    else:
+        speech_text = "Das Spiel wird im Bot Modus gestartet. Bitte platziere deine Schiffe oder sag 'Schiffe zufällig platzieren', um die Schiffe per Zufall auf dem Spielfeld zu verteilen."
+    elif mode in ["multiplayer modus", "multiplayer mode"]:
         skill_message.append("multiplayer modus")
         speech_text = "Das Spiel wird im Multiplayer Modus gestartet. Bitte gibt die IP deines Gegners ein."
+    else:
+        #TODO: message.append(??)
+        speech_text = "Deinen gewünschten Spielmodus habe ich nicht richtig verstanden, bitte versuche es erneut."
     return speech_text
 
 
@@ -67,6 +70,7 @@ def start_game():
 @app.route('/set_ip/<ip>')
 def set_ip(ip):
     global enemy_ip
+    print("IP:" + ip)
     enemy_ip = ip
     speech_text = "Die IP wurde gesetzt."
     return speech_text
