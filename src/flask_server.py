@@ -3,6 +3,7 @@ import threading
 import os
 
 skill_message = []
+enemy_ip = None
 
 
 def get_skill_message():
@@ -65,16 +66,16 @@ def start_game():
 
 @app.route('/set_ip/<ip>')
 def set_ip(ip):
-    global skill_message
-    skill_message.append(ip)
-    speech_text = "Die IP wurde auf " + ip + " gesetzt."
+    global enemy_ip
+    enemy_ip = ip
+    speech_text = "Die IP wurde gesetzt."
     return speech_text
 
 
 @app.route('/connect')
 def connect():
-    global skill_message
-    skill_message.append("connect")
+    global skill_message, enemy_ip
+    skill_message.append("connect to " + str(enemy_ip))
     speech_text = "Die Verbindung wird hergestellt."
     return speech_text
 
