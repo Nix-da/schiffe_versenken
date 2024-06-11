@@ -3,3 +3,8 @@ numpy==1.26.4
 pythonp2p==1.7.1
 pycryptodome==3.20.0
 pyinstaller==6.6.0
+flask==3.0.3
+ask-sdk==1.19.0
+boto3==1.28.78
+ask-sdk-core==1.19.0
+flask-ask-sdk==1.0.0
