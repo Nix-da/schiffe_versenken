@@ -27,11 +27,15 @@ gesture_recording = False
 gesture_coords = []
 gesture = "Gesture: "
 
+rect_list = []
+
 # Main loop
 running = True
 while running:
     # Fill the screen with white color
     screen.fill(WHITE)
+    for rect, color in rect_list:
+        pygame.draw.rect(screen, color, rect)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -115,14 +119,63 @@ while running:
 
         if detected_gesture == "horizontal" and direction == "left -> right":
             start_coord = gesture_coords[0]
-            rect_size = (30, 120)
-            rect_color = BLUE
-            pygame.draw.rect(screen, rect_color, pygame.Rect(start_coord, rect_size))
-        if detected_gesture == "horizontal" and direction == "top -> bottom":
-            start_coord = gesture_coords[0]
             rect_size = (120, 30)
             rect_color = BLUE
-            pygame.draw.rect(screen, rect_color, pygame.Rect(start_coord, rect_size))
+            rect = pygame.Rect(start_coord, rect_size)
+            rect_list.append((rect, rect_color))
+
+        elif detected_gesture == "vertical" and direction == "top -> bottom":
+            start_coord = gesture_coords[0]
+            rect_size = (30, 120)
+            rect_color = BLUE
+            rect = pygame.Rect(start_coord, rect_size)
+            rect_list.append((rect, rect_color))
+
+        elif detected_gesture == "horizontal" and direction == "right -> left":
+            start_coord = gesture_coords[0]
+            rect_list = [rect for rect in rect_list if not rect[0].collidepoint(start_coord)]
+
+        elif detected_gesture == "vertical" and direction == "bottom -> top":
+            start_coord = gesture_coords[0]
+            rect_list = [rect for rect in rect_list if not rect[0].collidepoint(start_coord)]
+
+        elif detected_gesture == "circle" and direction == "clockwise":
+            start_coord = gesture_coords[0]
+            for rect, color in rect_list:
+                if rect.collidepoint(start_coord):
+                    rect_list.remove((rect, color))
+                    # Create a new surface with the same size as the rectangle
+                    surface = pygame.Surface((rect.width, rect.height))
+                    # Draw the rectangle onto the surface
+                    pygame.draw.rect(surface, color, pygame.Rect((0, 0), (rect.width, rect.height)))
+                    # Rotate the surface
+                    rotated_surface = pygame.transform.rotate(surface, 90)
+                    # Get the rectangle of the rotated surface
+                    rotated_rect = rotated_surface.get_rect()
+                    # Update the position of the rotated rectangle to match the original rectangle
+                    rotated_rect.topleft = rect.topleft
+                    # Add the rotated rectangle and its color to the list
+                    rect_list.append((rotated_rect, color))
+                    break
+
+        elif detected_gesture == "circle" and direction == "counterclockwise":
+            start_coord = gesture_coords[0]
+            for rect, color in rect_list:
+                if rect.collidepoint(start_coord):
+                    rect_list.remove((rect, color))
+                    # Create a new surface with the same size as the rectangle
+                    surface = pygame.Surface((rect.width, rect.height))
+                    # Draw the rectangle onto the surface
+                    pygame.draw.rect(surface, color, pygame.Rect((0, 0), (rect.width, rect.height)))
+                    # Rotate the surface
+                    rotated_surface = pygame.transform.rotate(surface, -90)  # Rotate 90 degrees counterclockwise
+                    # Get the rectangle of the rotated surface
+                    rotated_rect = rotated_surface.get_rect()
+                    # Update the position of the rotated rectangle to match the original rectangle
+                    rotated_rect.topleft = rect.topleft
+                    # Add the rotated rectangle and its color to the list
+                    rect_list.append((rotated_rect, color))
+                    break
 
         gesture_recording = False
         gesture_coords = []
