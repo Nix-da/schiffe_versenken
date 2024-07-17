@@ -227,6 +227,9 @@ while running:
                 if game_over_action(event.button) == "menu":
                     back_to_menu()
 
+
+    print(pygame.mouse.get_pos())
+
     # refresh the display
     pygame.display.flip()
 
