@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
-import requests
+import moosegesture
+
 from GUI_constants import *
 from game_screen import display_game_screen, game_action, menu_button_rect
 from menu_screen import display_menu
@@ -43,10 +44,13 @@ primary_own = 1  # 0 = own field on top, 1 = enemy field on top
 current_state = "menu"
 game_type = "bot"
 
+gesture_recording = False
+
 
 def back_to_menu():
     global current_state
     current_state = "menu"
+
 
 def start_bot_game():
     global current_state, game_type, my_player, enemy_player
@@ -120,6 +124,14 @@ while running:
             start_multiplayer_game()
 
         display_menu(screen)
+        # check for gestures
+        if not gesture_recording:
+            gesture_path = []
+
+        if gesture_recording:
+            gesture_path.append(pygame.mouse.get_pos())
+            print("recording...")
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -186,7 +198,6 @@ while running:
 
             attack(y, x)
 
-
         display_game_screen(screen, my_player)
         # get key press events
         for event in pygame.event.get():
@@ -215,6 +226,9 @@ while running:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if game_over_action(event.button) == "menu":
                     back_to_menu()
+
+
+    print(pygame.mouse.get_pos())
 
     # refresh the display
     pygame.display.flip()
